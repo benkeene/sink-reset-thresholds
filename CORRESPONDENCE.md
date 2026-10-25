@@ -1,17 +1,17 @@
 # Correspondence: informal statements ↔ formal statements
 
-Status (2026-10-25): the four statements of record are stated in `Challenge.lean` and restated in `Solution.lean`
-with deliberate `sorry` bodies; nothing is proved and no check has run (§8 has no rows). Nothing in this file may
-describe a build, count or check except by quoting the command and its output.
+Status: TODO (author). One paragraph: what is proved, at which commit, which checks have run (each one is a
+row of "Build and audit record" below). Nothing in this file may describe a build, count or check except by
+quoting the command and its output.
 
 ## 1. Informal statements and status
 
-`docs/PROOF.md` §5 **Theorem**: for `k ≥ 1`, `n ≥ 2`, if `k = 1` or `n ≤ k + 3` then `M(n,k) = f_k(n) = ∑_{i=1}^{n-1} ⌈i/k⌉`;
-in particular the nine values for `3 ≤ n ≤ 5`, among them `M(5,2) = 6`. Its upper bound is Proposition 10 (§3), its
-lower bound Lemmas 12, 13, 14 (§4). Lab status: claim_0001 **VERIFIED** (prove run `2026-10-24_prove-claim-0001`;
-Ben's approval 2026-10-25; `~/conductor-lab/agents/shared/claim_0001/STATUS.yaml`). Formalization: not started.
-Not claimed by the packet and not a statement of record: the `n = k + 4` case in the independent prover's transcript
-(joint report Problem 2), the general conjecture, and PROOF.md Appendix A (computation, corroboration only).
+Lab claim `claim_0001`, status at the start of run `2026-10-25_formalize-sinkresetthresholds`: VERIFIED.
+
+- `SinkReset.reset_word_le_of_isAk` (record, PROOF.md §5 Theorem (upper bound), §3 Proposition 10): Upper bound. Let k ≥ 1 and either k = 1 or n ≤ k + 3. Every n-state A_k automaton with sink 0 has a reset word of length at most f k n = ∑_{i=1}^{n-1} ⌈i/k⌉ (PROOF.md §5, Theorem, upper bound; Proposition 10).
+- `SinkReset.exists_isAk_reset_ge` (record, PROOF.md §5 Theorem (lower bound), §4 Lemmas 12-14): Lower bound. Let n ≥ 2, k ≥ 1 and either k = 1 or n ≤ k + 3. Some n-state A_k automaton with sink 0 has no reset word shorter than f k n (PROOF.md §5, Theorem, lower bound; Lemmas 12, 13, 14). Together with the upper bound this says M(n,k) = f k n.
+- `SinkReset.five_two_reset_word_le` (record, PROOF.md §5 Theorem, the nine pairs, (5,2)): M(5,2) ≤ 6: every 5-state A_2 automaton with sink 0 has a reset word of length at most 6 (CLAIM.md headline; PROOF.md §5, the pair (5,2)).
+- `SinkReset.five_two_exists_isAk_reset_ge` (record, PROOF.md §4 Lemma 14 (C_{2,2}), §5 Theorem): M(5,2) ≥ 6: some 5-state A_2 automaton with sink 0 has no reset word of length less than 6 (CLAIM.md headline; PROOF.md §4 Lemma 14, the automaton C_{2,2}).
 
 ## 2. Statements of record
 
@@ -19,93 +19,163 @@ The statements of record are listed, in order, in `records.yaml`; `Challenge.lea
 `comparator.json` and `formalization.yaml` are rendered from it by `conductor package render`, and
 `conductor package check` fails on any drift among them.
 
-- `SinkReset.reset_word_le_of_isAk` (PROOF.md §5 Theorem, upper bound; §3 Proposition 10). For `n ≥ 1`, `k ≥ 1`
-  with `k = 1 ∨ n ≤ k + 3`, every `Automaton n` satisfying `IsAk k` has a word `w` with `IsReset w` and
-  `w.length ≤ f k n`. This is "`rt(A) ≤ f_k(n)` for every `n`-state `A_k` automaton with sink", hence
-  `M(n,k) ≤ f_k(n)`. Development lemma: to be named by the formalize plan.
-- `SinkReset.exists_isAk_reset_ge` (PROOF.md §5 Theorem, lower bound; §4 Lemmas 12–14). For `n ≥ 2`, `k ≥ 1` with
-  `k = 1 ∨ n ≤ k + 3`, there is an `Automaton n` with `IsAk k` all of whose reset words have length `≥ f k n`. This is
-  "some `n`-state `A_k` automaton with sink has `rt ≥ f_k(n)`" (the extremal automata `T_n`, `P_n`, `C_{k,1}`,
-  `C_{k,2}`), hence `M(n,k) ≥ f_k(n)`. With the previous entry: `M(n,k) = f_k(n)`, and the supremum is attained.
-  Development lemma: to be named by the formalize plan.
-- `SinkReset.five_two_reset_word_le` (PROOF.md §5, the pair `(5,2)`): the first entry at `n = 5`, `k = 2`, with
-  `f 2 5 = 6` evaluated: every 5-state `A_2` automaton with sink has a reset word of length `≤ 6`.
-- `SinkReset.five_two_exists_isAk_reset_ge` (PROOF.md §4 Lemma 14, `C_{2,2}`; §5): the second entry at `n = 5`,
-  `k = 2`: some 5-state `A_2` automaton with sink has no reset word of length `< 6`. The two together are the
-  CLAIM.md headline `M(5,2) = 6`.
+### SinkReset.reset_word_le_of_isAk (record)
+
+Informal (PROOF.md §5 Theorem (upper bound), §3 Proposition 10): Upper bound. Let k ≥ 1 and either k = 1 or n ≤ k + 3. Every n-state A_k automaton with sink 0 has a reset word of length at most f k n = ∑_{i=1}^{n-1} ⌈i/k⌉ (PROOF.md §5, Theorem, upper bound; Proposition 10).
+
+Lean statement (Challenge.lean):
+
+```lean
+theorem reset_word_le_of_isAk (n k : ℕ) [NeZero n] (hk : 1 ≤ k) (hnk : k = 1 ∨ n ≤ k + 3) (A : Automaton n) (hA : A.IsAk k) : ∃ w, A.IsReset w ∧ w.length ≤ f k n
+```
+
+Proved in Solution.lean from: (no named declaration)
+
+Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
+
+### SinkReset.exists_isAk_reset_ge (record)
+
+Informal (PROOF.md §5 Theorem (lower bound), §4 Lemmas 12-14): Lower bound. Let n ≥ 2, k ≥ 1 and either k = 1 or n ≤ k + 3. Some n-state A_k automaton with sink 0 has no reset word shorter than f k n (PROOF.md §5, Theorem, lower bound; Lemmas 12, 13, 14). Together with the upper bound this says M(n,k) = f k n.
+
+Lean statement (Challenge.lean):
+
+```lean
+theorem exists_isAk_reset_ge (n k : ℕ) [NeZero n] (hn : 2 ≤ n) (hk : 1 ≤ k) (hnk : k = 1 ∨ n ≤ k + 3) : ∃ A : Automaton n, A.IsAk k ∧ ∀ w, A.IsReset w → f k n ≤ w.length
+```
+
+Proved in Solution.lean from: (no named declaration)
+
+Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
+
+### SinkReset.five_two_reset_word_le (record)
+
+Informal (PROOF.md §5 Theorem, the nine pairs, (5,2)): M(5,2) ≤ 6: every 5-state A_2 automaton with sink 0 has a reset word of length at most 6 (CLAIM.md headline; PROOF.md §5, the pair (5,2)).
+
+Lean statement (Challenge.lean):
+
+```lean
+theorem five_two_reset_word_le (A : Automaton 5) (hA : A.IsAk 2) : ∃ w, A.IsReset w ∧ w.length ≤ 6
+```
+
+Proved in Solution.lean from: (no named declaration)
+
+Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
+
+### SinkReset.five_two_exists_isAk_reset_ge (record)
+
+Informal (PROOF.md §4 Lemma 14 (C_{2,2}), §5 Theorem): M(5,2) ≥ 6: some 5-state A_2 automaton with sink 0 has no reset word of length less than 6 (CLAIM.md headline; PROOF.md §4 Lemma 14, the automaton C_{2,2}).
+
+Lean statement (Challenge.lean):
+
+```lean
+theorem five_two_exists_isAk_reset_ge : ∃ A : Automaton 5, A.IsAk 2 ∧ ∀ w, A.IsReset w → 6 ≤ w.length
+```
+
+Proved in Solution.lean from: (no named declaration)
+
+Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
 
 ## 3. Definition audit
 
-- `f k n = ∑ i ∈ Finset.range n, (i + k - 1) / k`. For `k ≥ 1`, `(i + k - 1) / k = ⌈i/k⌉` (Mathlib
-  `Nat.ceilDiv_eq_add_pred_div`), and the `i = 0` term is `0`, so `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉ = f_k(n)` of PROOF.md.
-  Checked by `decide` for the nine pairs during packaging (`f 2 5 = 6`, `f 1 5 = 10`, `f 3 5 = 5`, `f 2 4 = 4`,
-  `f 4 5 = 4`, `f 3 4 = 3`); for `k = 0` the value is meaningless and excluded by the hypothesis `1 ≤ k`.
-- `Letter n := Fin n → Fin n`; `act w q` folds the letters of `w` over `q` from the left. PROOF.md §0 writes the right
-  action `q · a` and `q · (uv) = (q · u) · v`; `act (u ++ v) q = act v (act u q)` by `List.foldl_append`.
-- `Automaton n` (with `[NeZero n]` so that `0 : Fin n` exists): `letters : Set (Letter n)` and `sink_fixed`. PROOF.md
-  §0 and CLAIM.md take "a finite alphabet of letters, each a transformation of Q fixing 0". Any set of
-  transformations of `Fin n` is finite, so no finiteness hypothesis is lost; distinct letters with the same
-  transformation are identified, which changes neither reset words (only the transformation acts) nor the game
-  (Alice's and Bob's choices are the same transformations). The states are `Fin n`, the sink is `0`, as in §0.
-- `IsWord`, `IsReset`: a reset word is a word over the alphabet with `act w q = 0` for every `q`. PROOF.md §0: `w` is a
-  reset word iff `Q · w = {0}` iff `q · w = 0` for all `q` (since `0 · w = 0`). The reset threshold `rt(A)` is not
-  defined as a number; "`rt(A) ≤ m`" is "there is a reset word of length `≤ m`" and "`rt(A) ≥ m`" is "every reset
-  word has length `≥ m`", which is how the statements of record use it (so the value `∞` for non-synchronizing
-  automata never arises).
-- `AliceWins A k S` (inductive). Position `S` is the image of the state set under the history. Constructor `reset`:
-  `S ⊆ {0}`, i.e. the history is a reset word (`0 ∈ Q · h` always, PROOF.md §0, so `Q · h = {0}` iff `Q · h ⊆ {0}`).
-  Constructor `step`: Alice plays a letter `a` of the alphabet, and for every reply `u` of Bob, a word over the
-  alphabet with `u.length < k` (the empty word included, as in CLAIM.md), Alice wins from `S.image (act (a :: u))`,
-  the image of `S` under `a u`. Why this is "Alice has a winning strategy": the game has finitely many positions
-  (subsets of `Fin n`) and finitely many moves at each (letters, replies of bounded length over a finite alphabet),
-  and Alice's goal is to reach a position `⊆ {0}`. In such a reachability game the positions from which Alice has
-  a strategy winning against every behaviour of Bob are exactly the least fixed point of "already at the goal, or
-  some Alice move after which every Bob reply leads to a winning position", which is this inductive predicate
-  (a winning strategy wins within a bounded number of rounds by König's lemma, and the attractor closes it). Two
-  simplifications are faithful: Alice moves first (PROOF.md Lemma 1(a) proves the order of the first move is
-  irrelevant); and only end-of-round positions are inspected, which is harmless because a reset word followed by
-  any word is a reset word (`0` is fixed), so a reset inside Bob's reply is still a reset at its end.
-- `IsAk A k := AliceWins A k Finset.univ`: Alice wins from the full state set, the start of the game.
+TODO: each definition in `Challenge.lean`, what it means, and why it is the intended notion.
 
 ## 4. Hypotheses and conventions
 
-- `[NeZero n]` on every statement (and on `Automaton n`): `n ≠ 0`, so the sink `0 : Fin n` exists. For `n = 1` the
-  upper bound is trivial (the empty word is a reset word; `f k 1 = 0`) and the lower bound is stated only for
-  `2 ≤ n`, as in the Theorem (`n ≥ 2`).
-- `1 ≤ k`: PROOF.md assumes `k ≥ 1`. With `k = 0` Bob has no replies and `(i + 0 - 1) / 0 = 0`, so the statement
-  would be false and meaningless; it is excluded, not formalized.
-- `k = 1 ∨ n ≤ k + 3`: the Theorem's hypothesis verbatim ("If `k = 1`, or `n ≤ k + 3`"); no relation between `n`
-  and `k` is assumed otherwise (so `k ≥ n` is allowed, where `f k n = n - 1`).
-- Natural subtraction appears once, in `i + k - 1`; with `k ≥ 1` it is exact. `Finset.range n = {0, …, n-1}` matches
-  the sum `∑_{i=1}^{n-1}` because the `i = 0` term vanishes.
-- States are indexed `0, …, n-1` as in PROOF.md §0, the sink being `0`. Words are `List (Letter n)`, lengths are
-  `List.length`, and `act` applies the first letter first.
-- Universes: everything is in `Type` (`Fin n`, functions, lists, finsets); no universe variables.
-- The headline statements use the numerals `5`, `2`, `6` directly (`Automaton 5`, `IsAk 2`, length `6`), with
-  `NeZero 5` found by instance search.
+TODO: natural subtraction, indexing, coercions, universes, and every hypothesis of each statement.
 
 ## 5. Formalized scope and gaps
 
-Formalized (as statements; proofs pending): the Theorem of PROOF.md §5 in its full hypothesis `k = 1 ∨ n ≤ k + 3`,
-as upper and lower bound, and its instance `(5,2)`. Informal only: `M(n,k)` as a supremum (the bounds say the
-supremum is attained and equals `f k n`); the equivalence of the Alice-first and Bob-first games (Lemma 1(a)), which
-the definition builds in; Remarks 1–3 of §5; the `n = k + 4` result of the independent prover's transcript, not part
-of the claim. Excluded: PROOF.md Appendix A (computational record; corroboration only, never a premise) and
-Appendix B (packet errata; applied to `docs/CLAIM.md`, `docs/CONTEXT.md`, `docs/COMPUTATION.md` in this repository,
-the packet files untouched); the general Lipin–Volkov conjecture (`n ≥ k + 4`, `k ≥ 2`).
+TODO: what is formalized, what is informal only, and exclusions.
 
 ## 6. Toolchain
 
-`lean-toolchain`: `leanprover/lean4:v4.35.0-rc3`; Mathlib `v4.35.0-rc3`. Never commit `.lake`.
+`lean-toolchain`: `leanprover/lean4:v4.35.0-rc3`; Mathlib `v4.35.0-rc3 (c55e6e786f49471c72fbddbec5415808896aec1e)`. Never commit `.lake`.
 
 ## 7. Provenance
 
-Per declaration of record: the model that wrote its proof, the job id and the round. Filled by
-`conductor package provenance . --from <run.json>`; edit the run, not this table.
+Per declaration closed in run `2026-10-25_formalize-sinkresetthresholds`: the model that wrote its proof, the job id, the round and the
+commit, from run.json (`conductor formalize correspondence`); edit the run, not this table.
 
 <!-- conductor:provenance:begin -->
-| declaration | model | job id | round |
-|---|---|---|---|
+| declaration | model | job id | round | commit |
+|---|---|---|---|---|
+| `SinkReset.Plan.active` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.ResetOn` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.Within` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.SC` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.Z` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.Y` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.Distances` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.act_append` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.word_append` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.act_zero` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.image_active_le` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.kill_decreases` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.within_compose` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.within_univ` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.wins_mono` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.wins_word` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.one_game_iff` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.bob_first_iff` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.trap` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.wins_of_rank` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.distances_exist` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.reachable_reset` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.distance_facts` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.distance_Y` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.short_kill` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.classical_bound` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.lift_word` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.wins_push` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.wins_pull` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.closed_set_of_not_sc` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.closed_reduction` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_one` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_small` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_cycle` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_split` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.escape_to_Y` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.few_bad` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.no_return` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.greedy` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.two_bad` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.sc_upper` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.upper` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.potential` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.potential_bound` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.kill` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.transposition` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.transposition_step` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.sum_values` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.transposition_reset` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.transposition_sharp` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.predecessor` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.path` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.path_action` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.path_sharp` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.shift` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycleWeight` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle_step` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle_sum` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle_reset` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycleDelta` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.delay` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycleRank` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.delay_spec` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle_rank_step` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle_wins` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle_loses` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.cycle_sharp` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
+| `SinkReset.Plan.lower` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.reset_word_le_of_isAk_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.exists_isAk_reset_ge_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.five_two_reset_word_le_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.five_two_exists_isAk_reset_ge_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.reset_word_le_of_isAk` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
+| `SinkReset.exists_isAk_reset_ge` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
+| `SinkReset.five_two_reset_word_le` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
+| `SinkReset.five_two_exists_isAk_reset_ge` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
 <!-- conductor:provenance:end -->
 
 ## 8. Build and audit record
@@ -116,15 +186,20 @@ is a row with outcome `NOT RUN`.
 
 | date | command | commit | quoted output |
 |---|---|---|---|
-| 2026-10-25 | `lake build` | 4854121 | `8 sorry warnings; last line: Build completed successfully (8965 jobs).; exit 0` |
-| 2026-10-25 | `ruby scripts/validate-formalization.rb` | 4854121 | `formalization.yaml contains no TEMPLATE values; exit 0` |
-| 2026-10-25 | `python3 -I scripts/check-lean-sources.py` | 4854121 | `Lean source requirements satisfied; exit 0` |
-| 2026-10-25 | `uv run conductor package check ~/sink-reset-thresholds (from ~/conductor)` | 4854121 | `check: OK (0 drift findings); exit 0` |
-| 2026-10-25 | `uv run conductor lean probe fidelity --tree ~/sink-reset-thresholds` (from ~/conductor) | 4854121 (identical tree, run before the commit) | `"fidelity":"MISMATCH"`, `"detail":"Illegal axiom detected: 'sorryAx'"` (job `~/.cache/conductor/sinkresetthresholds/fidelity/20261025T083324-303708`; the exit code was not captured, a pipe hid it). Expected: Solution.lean still proves every record by `sorry`; the row stays until a sorry-free Solution is probed |
+| 2026-10-25 | `lake build` (lake build) | 1f2b0df9da90 | exit code 0: Build completed successfully (8966 jobs). (quote `003-lake-build.txt` sha256 653688f25e69) |
+| 2026-10-25 | `lake build Challenge SinkReset SinkReset.Basic SinkReset.Plan Solution` (lake build) | 1f2b0df9da90 | exit code 0: Build completed successfully (8966 jobs). (quote `004-lake-build-modules.txt` sha256 fdf3bfaac3b9) |
+| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-1/inv-1-20261025T133338/audit/job/sweep-solution.lean` (AxiomAudit (axiom sweep)) | 1f2b0df9da90 | exit code 0: {"caption":"","data":"TYPE SinkReset.five_two_reset_word_le : ∀\n  (A :\n    @SinkReset.Automaton (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))))\n  (hA :\n    @SinkReset.Automaton.IsAk (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0}  (quote `005-sweep-solution.txt` sha256 57495a71567e) |
+| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-1/inv-1-20261025T133338/audit/job/sweep-challenge.lean` (AxiomAudit (axiom sweep)) | 1f2b0df9da90 | exit code 0: {"caption":"","data":"BAD_AXIOMS SinkReset.exists_isAk_reset_ge in Challenge : [sorryAx]","endPos":{"column":7,"line":31},"fileName":"/Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-1/inv-1-20261025T133338/audit/job/sweep-challenge.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":31},"severity":"information"} ⏎ {"captio (quote `006-sweep-challenge.txt` sha256 b8c2e057c724) |
+| 2026-10-25 | `lake env leanchecker SinkReset.Basic` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `008-leanchecker-SinkReset.Basic.txt` sha256 0a6c4d300070) |
+| 2026-10-25 | `lake env leanchecker Solution` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `007-leanchecker-Solution.txt` sha256 d4d2c05a57fc) |
+| 2026-10-25 | `lake env leanchecker Challenge` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `009-leanchecker-Challenge.txt` sha256 090139637726) |
+| 2026-10-25 | `lake env leanchecker SinkReset.Plan` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `010-leanchecker-SinkReset.Plan.txt` sha256 41368e23ae73) |
 
 ## 9. Independent statement reconstruction
 
-TODO: the reconstruction transcript, and the Lean check of its equivalence with the statements of record.
+- NOT RUN at this commit: the reconstruction runs after this file is committed (`conductor formalize review`). Its record is the run's `review/recon.json` (statements, hashes, breach scan, per-record AGREES/DIFFERS), and `conductor formalize gate` refuses to hand off unless it AGREES with every record.
+
+Lean check of the reconstruction's equivalence with the statements of record: NOT RUN (not built in conductor v1; a human compares the statements above with §2).
 
 ## 10. Source provenance
 

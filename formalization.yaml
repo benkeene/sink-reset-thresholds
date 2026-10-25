@@ -28,9 +28,9 @@ status:
     deliberate sorry bodies, and the development library SinkReset is empty. Not formalized: M(n,k) as a
     supremum, the general Lipin-Volkov conjecture, PROOF.md Appendix A (computation). No build has been
     recorded yet: CORRESPONDENCE.md "Build and audit record" has no rows.
-  sorry_count: 8
+  sorry_count: 4
   sorry_in_definitions: 0
-  axioms: ["propext", "Quot.sound", "Classical.choice"]
+  axioms: ["Classical.choice", "Quot.sound", "propext"]
   main_results:
     - "SinkReset.reset_word_le_of_isAk"
     - "SinkReset.exists_isAk_reset_ge"
