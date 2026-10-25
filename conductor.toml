@@ -1,0 +1,18 @@
+schema = "conductor/repo/1"
+
+[project]
+name = "sinkresetthresholds"
+libs = ["SinkReset"]
+
+[scopes]
+challenge = ["Challenge.lean"]
+excluded = ["Targets/**"]
+
+[files]
+never_edit = ["Challenge.lean", "Solution.lean", "lakefile.toml", "lean-toolchain"]
+
+[streams.A]
+owned = ["SinkReset.lean", "SinkReset/**"]
+
+[records]
+names = ["SinkReset.reset_word_le_of_isAk", "SinkReset.exists_isAk_reset_ge", "SinkReset.five_two_reset_word_le", "SinkReset.five_two_exists_isAk_reset_ge"]

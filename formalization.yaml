@@ -8,7 +8,7 @@ version: "v0.4"
 
 project:
   name: "Sharp reset thresholds for bounded-response synchronization games with a sink"
-  description: "TEMPLATE: what the formalization proves"
+  description: "Lean 4 / Mathlib statements of the theorem M(n,k) = sum_{i=1}^{n-1} ceil(i/k) for k = 1 or n <= k+3 (Lipin-Volkov k-game on automata with a sink), rendered as an upper and a lower bound, with the headline case M(5,2) = 6; proofs are to be supplied by the conductor formalize run."
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -19,14 +19,16 @@ repository:
   role: substantive-development
 
 classification:
-  arxiv: ["TEMPLATE: arXiv category, e.g. math.CO"]
-  msc2020: ["TEMPLATE: MSC2020 code"]
+  arxiv: ["cs.FL", "math.CO"]
+  msc2020: ["68Q45", "68Q70"]
 
 status:
   scope: >-
-    TEMPLATE: what is proved, what is not formalized, and the build that shows it (quote the command
-    and its output; see CORRESPONDENCE.md "Build and audit record").
-  sorry_count: "TEMPLATE: number of sorries in the repository (the deliberate ones in Challenge.lean)"
+    Stated, not yet proved: the four statements of record are in Challenge.lean and Solution.lean with
+    deliberate sorry bodies, and the development library SinkReset is empty. Not formalized: M(n,k) as a
+    supremum, the general Lipin-Volkov conjecture, PROOF.md Appendix A (computation). No build has been
+    recorded yet: CORRESPONDENCE.md "Build and audit record" has no rows.
+  sorry_count: 8
   sorry_in_definitions: 0
   axioms: ["propext", "Quot.sound", "Classical.choice"]
   main_results:
@@ -37,42 +39,80 @@ status:
 
 fidelity:
   divergences: >-
-    TEMPLATE: every way the formal statements differ from the informal theorem.
+    (1) M(n,k) is not defined; "M(n,k) = f_k(n)" is rendered as the pair: every n-state A_k automaton with
+    sink has a reset word of length <= f k n, and some n-state A_k automaton with sink has no reset word
+    shorter than f k n. (2) The alphabet is any Set of transformations of Fin n fixing 0 (finite because
+    Fin n -> Fin n is finite); letters are identified with their transformations. (3) A_k is the inductive
+    predicate Automaton.AliceWins (Alice moves first; the attractor of the finite reachability game) rather
+    than an explicit strategy function; PROOF.md Lemma 1(a) is built in. (4) ceil(i/k) is (i + k - 1) / k in
+    natural-number division, valid for k >= 1, and the hypotheses 1 <= k and (for the lower bound) 2 <= n are
+    explicit; [NeZero n] gives the sink 0 : Fin n. See CORRESPONDENCE.md sections 3 to 5.
 
 sources:
-  - title: "TEMPLATE: title of the informal source (PROOF.md or paper)"
-    authors: ["TEMPLATE: author"]
+  - title: "Sharp reset thresholds for bounded-response synchronization games with a sink (proof of record, unpublished; docs/PROOF.md)"
+    authors: ["Ben Keene"]
     type: "original-proof"
     relationship: other
     note: >-
-      TEMPLATE: how the informal proof was produced and reviewed.
+      Proof text written by Claude Opus (conductor prove run 2026-10-24_prove-claim-0001, job att-1) from the
+      conjectured claim; three adversary rounds and three reviewer rounds by GPT-6 Astra (all findings minor,
+      repaired); an independent GPT-6 Astra proof (ind-1) and a fresh isolated re-proof (rep-1), both PROVED;
+      Opus comparison AGREES; joint judgment Opus ACCEPT 0.96, Astra ACCEPT 0.98; approved VERIFIED by Ben Keene
+      on 2026-10-25 (lab claim_0001). No external human review.
+  - title: "Adversarial Synchronization"
+    authors: ["Anton E. Lipin", "Mikhail V. Volkov"]
+    type: "article"
+    id: "https://arxiv.org/abs/2601.18362"
+    relationship: background
+    note: >-
+      Defines the k-game and A_k automata (section 2.1), proves M(n,1) = n(n-1)/2 and M(n,n-1) = n-1, exhibits the
+      automata L_m^k with reset threshold sum_{i=1}^{n-1} ceil(i/k), and states the conjecture (section 3.4) whose
+      cases k = 1 or n <= k+3 the statements of record settle.
+  - title: "Adversarial Synchronization and Reset Length (CiE 2026)"
+    authors: ["Anton E. Lipin", "Mikhail V. Volkov"]
+    type: "article"
+    id: "https://doi.org/10.1007/978-3-032-31348-5_24"
+    relationship: background
+    note: >-
+      Conference version; not inspected in full text (PROOF.md Appendix B item 1).
 
 related_formalizations: []
 
 automation:
   methods:
     - method: agent
-      models: ["TEMPLATE: models used, e.g. Claude Opus 5.5 (Anthropic), GPT-6 Astra (OpenAI)"]
+      models: ["Claude Opus (Anthropic): proof of record, responses, comparison, condensation, joint integrity read", "GPT-6 Astra (OpenAI): independent prover, adversary, reviewer, re-prover", "formal development: not yet run"]
       framework: "conductor (Claude Code; Codex app-server for GPT-6 Astra)"
       tool_setup: >-
-        TEMPLATE: how the agents ran (worktrees, lake build feedback, judge, gate).
+        conductor P-prove loop (claude -p for Opus; Codex app-server for GPT-6 Astra in instruction-only isolation;
+        every reply parsed fail-closed; promotion through the gate with Ben's approval). P-formalize (worktree
+        streams, lake build feedback, Astra ladder, judge, F-gate) has not yet run on this repository.
       cost:
-        wall_time: "TEMPLATE: from the run's SUMMARY.md"
+        wall_time: "P-prove: 2026-10-24 13:16 to 18:34 UTC pipeline time, approval 2026-10-25; P-formalize: not yet run"
         spend_usd: "subscription-based"
         hardware: "local machine plus API/subscription model access"
       prompting_notes: >-
-        TEMPLATE: role prompts used (prover, adversary, reviewer, statement reconstruction).
+        conductor/prove/prompts: independent prover, attempt, adversary (framings refute, reduction, boundary),
+        respond, review, reprove, compare, condense, joint. Formal roles (planner, prover, judge, reviewer-formal,
+        statement reconstruction) will be those of conductor/formalize.
   spend_usd: "subscription-based"
   notes: >-
-    TEMPLATE: who wrote what; agent agreement is never treated as evidence; the evidence is the Lean
-    kernel and the CI comparator.
+    Challenge.lean definitions and records.yaml were written by Claude (Fable 5.1) in the conductor session that
+    packaged the claim, from PROOF.md section 0 and CLAIM.md "Definitions"; the informal proof by Claude Opus; the
+    reviews by GPT-6 Astra. Agent agreement is never treated as evidence; the evidence is the Lean kernel and the
+    CI comparator.
 
 review:
   status: self-assessed
   reviewers:
-    - "TEMPLATE: reviewer and what they read"
+    - "Ben Keene (read GATE_REPORT.md and approved VERIFIED, 2026-10-25; CORRESPONDENCE.md not yet read)"
+    - "GPT-6 Astra (independent prover ind-1; adversary adv-r1, adv-r2, adv-r3.2; reviewer rev-r1, rev-r2, rev-r3.2; re-prover rep-1; 2026-10-24)"
+    - "Claude Opus (comparison cmp-1.3 of the two proofs, AGREES; joint integrity read joint-1.2, ACCEPT 0.96; 2026-10-24)"
   notes: >-
-    TEMPLATE: review passes and their outcomes.
+    Informal proof: adversary rounds ACCEPT_WITH_FIXES, all findings repaired; final reviewer ACCEPT 0.98 with
+    every finding RESOLVED; independent and isolated re-proofs PROVED; gate hard rules PKT, LINK, SM, INTEGRITY
+    passed, advisory warnings P2, V1, V2, V5 (reply-format slips and an empty COMPUTATION.md template, none
+    mathematical). Formal statements: no review yet.
 
 known_gaps: []
 
@@ -84,19 +124,19 @@ alignment:
     - source: "Upper bound. Let k ≥ 1 and either k = 1 or n ≤ k + 3. Every n-state A_k automaton with sink 0 has a reset word of length at most f k n = ∑_{i=1}^{n-1} ⌈i/k⌉ (PROOF.md §5, Theorem, upper bound; Proposition 10). [PROOF.md §5 Theorem (upper bound), §3 Proposition 10]"
       lean: "SinkReset.reset_word_le_of_isAk"
       module: "Challenge (statement), Solution (proof)"
-      status: "TEMPLATE: proved | stated | partial"
+      status: "stated"
     - source: "Lower bound. Let n ≥ 2, k ≥ 1 and either k = 1 or n ≤ k + 3. Some n-state A_k automaton with sink 0 has no reset word shorter than f k n (PROOF.md §5, Theorem, lower bound; Lemmas 12, 13, 14). Together with the upper bound this says M(n,k) = f k n. [PROOF.md §5 Theorem (lower bound), §4 Lemmas 12-14]"
       lean: "SinkReset.exists_isAk_reset_ge"
       module: "Challenge (statement), Solution (proof)"
-      status: "TEMPLATE: proved | stated | partial"
+      status: "stated"
     - source: "M(5,2) ≤ 6: every 5-state A_2 automaton with sink 0 has a reset word of length at most 6 (CLAIM.md headline; PROOF.md §5, the pair (5,2)). [PROOF.md §5 Theorem, the nine pairs, (5,2)]"
       lean: "SinkReset.five_two_reset_word_le"
       module: "Challenge (statement), Solution (proof)"
-      status: "TEMPLATE: proved | stated | partial"
+      status: "stated"
     - source: "M(5,2) ≥ 6: some 5-state A_2 automaton with sink 0 has no reset word of length less than 6 (CLAIM.md headline; PROOF.md §4 Lemma 14, the automaton C_{2,2}). [PROOF.md §4 Lemma 14 (C_{2,2}), §5 Theorem]"
       lean: "SinkReset.five_two_exists_isAk_reset_ge"
       module: "Challenge (statement), Solution (proof)"
-      status: "TEMPLATE: proved | stated | partial"
+      status: "stated"
 
 acknowledgements: >-
   Mathlib and the Lean FRO toolchain (Lean, Lake, lake comparator); the PalomarTemplate verification

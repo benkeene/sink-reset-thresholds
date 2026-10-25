@@ -2,7 +2,11 @@
 
 Sharp reset thresholds for bounded-response synchronization games with a sink — a Lean 4 / Mathlib formalization.
 
-TODO (author): two or three sentences on what is proved. Status statements must point at a quoted row of
+Lean statements of the theorem of `docs/PROOF.md` §5: for `k = 1` or `n ≤ k + 3`, every `n`-state `A_k`
+automaton with a sink has a reset word of length at most `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉`, and some such automaton has
+none shorter; in particular `M(5,2) = 6`. The informal proof is the VERIFIED packet claim_0001 of the conductor lab
+(Lipin–Volkov conjecture, arXiv:2601.18362, finite cases). Status statements must point at a quoted row of
+`CORRESPONDENCE.md` §8 ("Build and audit record"); no proof of a statement of record has been built yet.
 `CORRESPONDENCE.md` §8 ("Build and audit record").
 
 ## Layout
