@@ -1,8 +1,13 @@
 # Correspondence: informal statements ↔ formal statements
 
-Status: TODO (author). One paragraph: what is proved, at which commit, which checks have run (each one is a
-row of "Build and audit record" below). Nothing in this file may describe a build, count or check except by
-quoting the command and its output.
+Status (2026-10-25): the four statements of record are proved. Each is stated in `Challenge.lean` (record
+bodies deliberately `sorry`, checked against `Solution.lean` by the comparator) and proved in `Solution.lean` by
+one term naming its `_dev` copy in `SinkReset/Plan.lean`, whose development was written in the P-formalize run
+`2026-10-25_formalize-sinkresetthresholds` (§7 says by whom, declaration by declaration). Every check that ran is
+a row of §8, each naming the commit it ran at; the Lean sources, lakefile, toolchain, manifest, comparator,
+`records.yaml` and `conductor.toml` have not changed since commit 1f2b0df9da90 (the §8 row quoting
+`git diff --stat` shows the empty diff), so a row at any later commit covers these sources. Nothing in this file
+may describe a build, count or check except by quoting the command and its output.
 
 ## 1. Informal statements and status
 
@@ -31,7 +36,7 @@ theorem reset_word_le_of_isAk (n k : ℕ) [NeZero n] (hk : 1 ≤ k) (hnk : k = 1
 
 Proved in Solution.lean from: (no named declaration)
 
-Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
+Informal ↔ formal argument: `[NeZero n]` is `n ≥ 1` and supplies the sink `0 : Fin n`; `hk : 1 ≤ k` and `hnk : k = 1 ∨ n ≤ k + 3` are the Theorem's hypotheses verbatim (PROOF.md §5: "k ≥ 1", "if k = 1, or n ≤ k + 3"); `A : Automaton n` with `hA : A.IsAk k` is "A is an n-state A_k automaton with sink" (§3); the conclusion `∃ w, A.IsReset w ∧ w.length ≤ f k n` is "rt(A) ≤ f_k(n)", a reset word of length at most f_k(n), with `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉` by §3. The case `n = 1`, which PROOF.md does not state, is harmless: `f k 1 = 0` and the empty word is a reset word. Solution.lean proves it by the term `reset_word_le_of_isAk_dev n k hk hnk A hA`; that `_dev` theorem is `Plan.upper` (SinkReset/Plan.lean:1184, Proposition 10), which follows PROOF.md §3: the reduction to the strongly connected case (`Plan.closed_reduction`, Lemma 3), the strongly connected case itself (`Plan.sc_upper` with `Plan.two_bad`, Proposition 9, which uses Lemmas 5–8) and the classical bound for `k = 1` (`Plan.classical_bound`, Lemma 2). Its axioms are quoted in the §8 row "per-record axioms".
 
 ### SinkReset.exists_isAk_reset_ge (record)
 
@@ -45,7 +50,7 @@ theorem exists_isAk_reset_ge (n k : ℕ) [NeZero n] (hn : 2 ≤ n) (hk : 1 ≤ k
 
 Proved in Solution.lean from: (no named declaration)
 
-Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
+Informal ↔ formal argument: `hn : 2 ≤ n` is the Theorem's `n ≥ 2`, `hk` and `hnk` as above; the conclusion `∃ A : Automaton n, A.IsAk k ∧ ∀ w, A.IsReset w → f k n ≤ w.length` is "some n-state A_k automaton with sink has no reset word shorter than f_k(n)", i.e. rt(A) ≥ f_k(n). It is not vacuous: `Plan.wins_word` (Plan.lean:129, needs `1 ≤ k`) produces a reset word from `IsAk k`, and with the upper record the witness has rt(A) = f_k(n), so the supremum M(n,k) is attained. Solution.lean proves it by `exists_isAk_reset_ge_dev n k hn hk hnk`, which is `Plan.lower` (Plan.lean:2113) specialised (`omega` turns `k = 1 ∨ n ≤ k + 3` into its hypothesis `k = 1 ∨ n ≤ 2 * k + 1`, so the development proves the lower bound on a wider range than the record). The witnesses are PROOF.md §4's: the transposition automaton for `k = 1` (`Plan.transposition_sharp`, Lemma 12), the path automaton for `n ≤ k + 1` (`Plan.path_sharp`, Lemma 13) and the cycle automata C_{k,m} (`Plan.cycle_sharp`, Lemma 14, through the potential bound `Plan.potential_bound`, Lemma 11), with `f` evaluated by `Plan.f_cycle`, `Plan.f_split` (Lemma 4) and `Plan.f_one`.
 
 ### SinkReset.five_two_reset_word_le (record)
 
@@ -59,7 +64,7 @@ theorem five_two_reset_word_le (A : Automaton 5) (hA : A.IsAk 2) : ∃ w, A.IsRe
 
 Proved in Solution.lean from: (no named declaration)
 
-Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
+Informal ↔ formal argument: the `(5,2)` instance of the upper record: `A : Automaton 5` with `hA : A.IsAk 2` is a 5-state A_2 automaton with sink, and a reset word of length `≤ 6` is rt(A) ≤ 6 = f_2(5) (CLAIM.md headline M(5,2) ≤ 6; PROOF.md §5, the pair (5,2)). Solution.lean proves it by `five_two_reset_word_le_dev A hA`, which applies `reset_word_le_of_isAk_dev 5 2` and rewrites `f 2 5 = 6` by `norm_num [f, Finset.sum_range_succ]`.
 
 ### SinkReset.five_two_exists_isAk_reset_ge (record)
 
@@ -73,19 +78,98 @@ theorem five_two_exists_isAk_reset_ge : ∃ A : Automaton 5, A.IsAk 2 ∧ ∀ w,
 
 Proved in Solution.lean from: (no named declaration)
 
-Informal ↔ formal argument: TODO (documentation agent; quoted outputs only).
+Informal ↔ formal argument: the `(5,2)` instance of the lower record: a 5-state A_2 automaton with sink none of whose reset words is shorter than `6` (CLAIM.md headline M(5,2) ≥ 6; PROOF.md §4 Lemma 14 and §5, the cycle automaton C_{2,2}, which has `2 + 2 + 1 = 5` states). Solution.lean proves it by `five_two_exists_isAk_reset_ge_dev`, which applies `exists_isAk_reset_ge_dev 5 2` and rewrites `f 2 5 = 6` as above.
 
 ## 3. Definition audit
 
-TODO: each definition in `Challenge.lean`, what it means, and why it is the intended notion.
+- `f k n = ∑ i ∈ Finset.range n, (i + k - 1) / k`. For `k ≥ 1`, `(i + k - 1) / k = ⌈i/k⌉` (Mathlib
+  `Nat.ceilDiv_eq_add_pred_div`), and the `i = 0` term is `0`, so `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉ = f_k(n)` of PROOF.md.
+  Checked by `decide` for the nine pairs during packaging (`f 2 5 = 6`, `f 1 5 = 10`, `f 3 5 = 5`, `f 2 4 = 4`,
+  `f 4 5 = 4`, `f 3 4 = 3`); for `k = 0` the value is meaningless and excluded by the hypothesis `1 ≤ k`.
+- `Letter n := Fin n → Fin n`; `act w q` folds the letters of `w` over `q` from the left. PROOF.md §0 writes the right
+  action `q · a` and `q · (uv) = (q · u) · v`; `act (u ++ v) q = act v (act u q)` by `List.foldl_append`.
+- `Automaton n` (with `[NeZero n]` so that `0 : Fin n` exists): `letters : Set (Letter n)` and `sink_fixed`. PROOF.md
+  §0 and CLAIM.md take "a finite alphabet of letters, each a transformation of Q fixing 0". Any set of
+  transformations of `Fin n` is finite, so no finiteness hypothesis is lost; distinct letters with the same
+  transformation are identified, which changes neither reset words (only the transformation acts) nor the game
+  (Alice's and Bob's choices are the same transformations). The states are `Fin n`, the sink is `0`, as in §0.
+- `IsWord`, `IsReset`: a reset word is a word over the alphabet with `act w q = 0` for every `q`. PROOF.md §0: `w` is a
+  reset word iff `Q · w = {0}` iff `q · w = 0` for all `q` (since `0 · w = 0`). The reset threshold `rt(A)` is not
+  defined as a number; "`rt(A) ≤ m`" is "there is a reset word of length `≤ m`" and "`rt(A) ≥ m`" is "every reset
+  word has length `≥ m`", which is how the statements of record use it (so the value `∞` for non-synchronizing
+  automata never arises).
+- `AliceWins A k S` (inductive). Position `S` is the image of the state set under the history. Constructor `reset`:
+  `S ⊆ {0}`, i.e. the history is a reset word (`0 ∈ Q · h` always, PROOF.md §0, so `Q · h = {0}` iff `Q · h ⊆ {0}`).
+  Constructor `step`: Alice plays a letter `a` of the alphabet, and for every reply `u` of Bob, a word over the
+  alphabet with `u.length < k` (the empty word included, as in CLAIM.md), Alice wins from `S.image (act (a :: u))`,
+  the image of `S` under `a u`. Why this is "Alice has a winning strategy": the game has finitely many positions
+  (subsets of `Fin n`) and finitely many moves at each (letters, replies of bounded length over a finite alphabet),
+  and Alice's goal is to reach a position `⊆ {0}`. In such a reachability game the positions from which Alice has
+  a strategy winning against every behaviour of Bob are exactly the least fixed point of "already at the goal, or
+  some Alice move after which every Bob reply leads to a winning position", which is this inductive predicate
+  (a winning strategy wins within a bounded number of rounds by König's lemma, and the attractor closes it). Two
+  simplifications are faithful: Alice moves first (PROOF.md Lemma 1(a) proves the order of the first move is
+  irrelevant); and only end-of-round positions are inspected, which is harmless because a reset word followed by
+  any word is a reset word (`0` is fixed), so a reset inside Bob's reply is still a reset at its end.
+- `IsAk A k := AliceWins A k Finset.univ`: Alice wins from the full state set, the start of the game.
+
+Why `AliceWins` is "Alice has a winning strategy", in both directions (this argument is prose, not a Lean theorem;
+§5 lists it as a gap). (⇒) A derivation of `AliceWins k S` is a strategy: at a `step` node Alice plays its letter
+`a`; every reply `u` of Bob (any word over the alphabet with `u.length < k`, the empty word included) leads to the
+position `S.image (act (a :: u))`, which the derivation covers. Derivations are well-founded, so every play reaches a
+`reset` node, a position `⊆ {0}`, i.e. the history is a reset word. A reset reached inside Bob's reply persists to
+its end, because `0` is fixed by every letter. (⇐) Suppose Alice has a history-dependent strategy that wins from `S`
+but `¬ AliceWins k S`. Then `S ⊄ {0}`, and for the strategy's first letter `a` the negated `step` constructor gives a
+legal reply `u` with `¬ AliceWins k (S.image (act (a :: u)))`; the residual strategy wins from that position, since
+the rest of the play depends only on the current image. Iterating (dependent choice) builds an infinite play
+consistent with the strategy that never reaches a position `⊆ {0}`, contradicting that the strategy wins. Alice
+moving first is PROOF.md Lemma 1(a). Two boundary facts: `IsAk 0` holds for the automaton whose only letter is the
+identity, although nothing resets it (with `k = 0` Bob has no reply and `AliceWins 0` is reached from any position
+in one step), which is why every record assumes `1 ≤ k`; and from a position not containing `0` Alice can only win
+by resetting, which never arises in the records since every position reached from `univ` contains `0`.
 
 ## 4. Hypotheses and conventions
 
-TODO: natural subtraction, indexing, coercions, universes, and every hypothesis of each statement.
+- `[NeZero n]` on every statement (and on `Automaton n`): `n ≠ 0`, so the sink `0 : Fin n` exists. For `n = 1` the
+  upper bound is trivial (the empty word is a reset word; `f k 1 = 0`) and the lower bound is stated only for
+  `2 ≤ n`, as in the Theorem (`n ≥ 2`).
+- `1 ≤ k`: PROOF.md assumes `k ≥ 1`. With `k = 0` Bob has no replies, `f 0 n = 0` (natural division by `0`) and
+  `IsAk 0` holds for automata that nothing resets (§3), so the upper record would be false; `hk` is necessary as
+  well as faithful.
+- `k = 1 ∨ n ≤ k + 3`: the Theorem's hypothesis verbatim ("If `k = 1`, or `n ≤ k + 3`"); no relation between `n`
+  and `k` is assumed otherwise (so `k ≥ n` is allowed, where `f k n = n - 1`).
+- Natural subtraction appears once, in `i + k - 1`; with `k ≥ 1` it is exact. `Finset.range n = {0, …, n-1}` matches
+  the sum `∑_{i=1}^{n-1}` because the `i = 0` term vanishes.
+- States are indexed `0, …, n-1` as in PROOF.md §0, the sink being `0`. Words are `List (Letter n)`, lengths are
+  `List.length`, and `act` applies the first letter first.
+- Universes: everything is in `Type` (`Fin n`, functions, lists, finsets); no universe variables.
+- The headline statements use the numerals `5`, `2`, `6` directly (`Automaton 5`, `IsAk 2`, length `6`), with
+  `NeZero 5` found by instance search.
+- `hn : 2 ≤ n` appears on the lower record only, as in the Theorem; the upper record also covers `n = 1` (§2).
 
 ## 5. Formalized scope and gaps
 
-TODO: what is formalized, what is informal only, and exclusions.
+Formalized and proved (§8 rows): the Theorem of PROOF.md §5 in its full hypothesis `k = 1 ∨ n ≤ k + 3`, as an
+upper and a lower bound, and its instance `(5,2)`. The development proves more than the records: `Plan.lower`
+(Plan.lean:2113) gives the lower bound for `k = 1 ∨ n ≤ 2 * k + 1`, and `Plan.cycle_sharp` (Plan.lean:1821) holds
+for every `k, m ≥ 1`; nothing extends the upper bound beyond `n ≤ k + 3` (PROOF.md Remark 2).
+
+Informal only: `M(n,k)` as a supremum (the two records say the supremum is attained and equals `f k n`); the
+equivalence of the Alice-first and Bob-first games (Lemma 1(a)), which the definition builds in; the argument that
+the inductive `AliceWins` is "Alice has a winning strategy" (§3, prose in both directions, not a Lean theorem);
+Remarks 1–3 of §5; the `n = k + 4` result of the independent prover's transcript, which is not part of the claim.
+
+Excluded: PROOF.md Appendix A (the computational record; corroboration only, never a premise) and Appendix B
+(packet errata, applied to `docs/CLAIM.md`, `docs/CONTEXT.md` and `docs/COMPUTATION.md` in this repository, the
+packet files untouched); the Lipin–Volkov conjecture beyond the proved range.
+
+Attribution. Lipin–Volkov (arXiv:2601.18362 §3.4) conjecture `M(n,k) = (n-1+k)(n-1)/(2k)` only when `k ∣ n-1`;
+on that domain this equals `f k n`. The records settle the conjecture's cases with `k ∣ n-1` and (`k = 1` or
+`n ≤ k + 3`), and the stronger ceiling-sum form `M(n,k) = f k n`, which Lipin–Volkov exhibit as a lower bound but do
+not conjecture, for every `k = 1` or `n ≤ k + 3` (for instance `(4,2)`, where `2 ∤ 3`). The module docstring of
+`Challenge.lean` (lines 20–21 and 35) states the attribution without this restriction; `Challenge.lean` is frozen
+for the formalize run (gate rule F4 pins its hash), so the docstring is corrected in a follow-up run. No statement of
+record, definition or proof is affected.
 
 ## 6. Toolchain
 
@@ -189,6 +273,7 @@ is a row with outcome `NOT RUN`.
 
 | date | command | commit | quoted output |
 |---|---|---|---|
+| 2026-10-25 | `git diff --stat 1f2b0df9da90 HEAD -- '*.lean' lakefile.toml lean-toolchain lake-manifest.json comparator.json records.yaml conductor.toml` (Lean sources unchanged since 1f2b0df9da90) | 7980c16efbd4 | rc=0 |
 | 2026-10-25 | `lake build` (lake build) | b1ea5dd6aa1e | exit code 0: Build completed successfully (8966 jobs). (quote `003-lake-build.txt` sha256 fd163b699876) |
 | 2026-10-25 | `lake build Challenge SinkReset SinkReset.Basic SinkReset.Plan Solution` (lake build) | b1ea5dd6aa1e | exit code 0: Build completed successfully (8966 jobs). (quote `004-lake-build-modules.txt` sha256 8dca7494b4c5) |
 | 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-2/inv-1-20261025T133626/audit/job/sweep-solution.lean` (AxiomAudit (axiom sweep)) | b1ea5dd6aa1e | exit code 0: {"caption":"","data":"TYPE SinkReset.five_two_reset_word_le : ∀\n  (A :\n    @SinkReset.Automaton (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))))\n  (hA :\n    @SinkReset.Automaton.IsAk (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0}  (quote `005-sweep-solution.txt` sha256 5d908ac78e69) |

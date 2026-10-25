@@ -8,7 +8,7 @@ version: "v0.4"
 
 project:
   name: "Sharp reset thresholds for bounded-response synchronization games with a sink"
-  description: "Lean 4 / Mathlib statements of the theorem M(n,k) = sum_{i=1}^{n-1} ceil(i/k) for k = 1 or n <= k+3 (Lipin-Volkov k-game on automata with a sink), rendered as an upper and a lower bound, with the headline case M(5,2) = 6; proofs are to be supplied by the conductor formalize run."
+  description: "Lean 4 / Mathlib statements of the theorem M(n,k) = sum_{i=1}^{n-1} ceil(i/k) for k = 1 or n <= k+3 (Lipin-Volkov k-game on automata with a sink), rendered as an upper and a lower bound, with the headline case M(5,2) = 6, proved in Solution.lean from the development SinkReset.Plan written in the conductor formalize run 2026-10-25_formalize-sinkresetthresholds."
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -24,10 +24,14 @@ classification:
 
 status:
   scope: >-
-    Stated, not yet proved: the four statements of record are in Challenge.lean and Solution.lean with
-    deliberate sorry bodies, and the development library SinkReset is empty. Not formalized: M(n,k) as a
-    supremum, the general Lipin-Volkov conjecture, PROOF.md Appendix A (computation). No build has been
-    recorded yet: CORRESPONDENCE.md "Build and audit record" has no rows.
+    The four statements of record are stated in Challenge.lean, whose record bodies are deliberate sorry
+    placeholders checked against Solution.lean by the comparator, and proved in Solution.lean, each by one term
+    naming its _dev copy in SinkReset.Plan (the development library, 2100 lines, no sorry). Not formalized:
+    M(n,k) as a supremum, the Lipin-Volkov conjecture and its ceiling-sum form beyond k = 1 or n <= k+3, the
+    prose equivalence of AliceWins with a winning strategy (CORRESPONDENCE.md section 3), and PROOF.md
+    Appendix A (computation). Build and audit: CORRESPONDENCE.md section 8, quoted rows (lake build,
+    axiom sweep, leanchecker, structural fidelity EQUAL, per-record axioms), with the commit each ran at.
+  # Challenge.lean's four deliberate record placeholders; Solution.lean and SinkReset have no sorry
   sorry_count: 4
   sorry_in_definitions: 0
   axioms: ["Classical.choice", "Quot.sound", "propext"]
@@ -66,8 +70,10 @@ sources:
     relationship: background
     note: >-
       Defines the k-game and A_k automata (section 2.1), proves M(n,1) = n(n-1)/2 and M(n,n-1) = n-1, exhibits the
-      automata L_m^k with reset threshold sum_{i=1}^{n-1} ceil(i/k), and states the conjecture (section 3.4) whose
-      cases k = 1 or n <= k+3 the statements of record settle.
+      automata L_m^k with reset threshold sum_{i=1}^{n-1} ceil(i/k), and conjecture (section 3.4) that
+      M(n,k) = (n-1+k)(n-1)/(2k) whenever k divides n-1 (which equals the ceiling sum there). The statements of
+      record settle the conjecture's cases with k | n-1 and (k = 1 or n <= k+3), and the stronger ceiling-sum
+      form, which Lipin-Volkov do not conjecture, for every k = 1 or n <= k+3.
   - title: "Adversarial Synchronization and Reset Length (CiE 2026)"
     authors: ["Anton E. Lipin", "Mikhail V. Volkov"]
     type: "article"
@@ -81,20 +87,26 @@ related_formalizations: []
 automation:
   methods:
     - method: agent
-      models: ["Claude Opus (Anthropic): proof of record, responses, comparison, condensation, joint integrity read", "GPT-6 Astra (OpenAI): independent prover, adversary, reviewer, re-prover", "formal development: not yet run"]
+      models: ["Claude Opus (Anthropic): proof of record, responses, comparison, condensation, joint integrity read", "GPT-6 Astra (OpenAI): independent prover, adversary, reviewer, re-prover", "formal development (P-formalize run 2026-10-25_formalize-sinkresetthresholds): GPT-6 Astra (OpenAI) planner, adversary and reviewer per framing, statement reconstruction; Claude Opus (Anthropic) plan materializer, stream prover, review responses; conductor judge (lake build, axiom sweep, leanchecker kernel replay, structural fidelity) on every commit"]
       framework: "conductor (Claude Code; Codex app-server for GPT-6 Astra)"
       tool_setup: >-
         conductor P-prove loop (claude -p for Opus; Codex app-server for GPT-6 Astra in instruction-only isolation;
         every reply parsed fail-closed; promotion through the gate with Ben's approval). P-formalize (worktree
-        streams, lake build feedback, Astra ladder, judge, F-gate) has not yet run on this repository.
+        streams, lake build feedback, Astra ladder, judge, F-gate) ran on this repository on 2026-10-25: Astra
+        planner; Opus stream session opus-A-r1-s1 wrote the proofs of the four records and 16 lemmas (its commit
+        was rejected by the judge for added section/variable commands and re-entered by the operator with explicit
+        binders as human session human-A-r1-h1, same proofs); session opus-A-r1-s3 filled the 18 plan definitions
+        and the 35 remaining lemmas; every commit judged, landed under a RECORDS_PROVED round; review by Astra
+        adversary and reviewer per framing with Opus responses (CORRESPONDENCE.md section 7 for the provenance).
       cost:
-        wall_time: "P-prove: 2026-10-24 13:16 to 18:34 UTC pipeline time, approval 2026-10-25; P-formalize: not yet run"
+        wall_time: "P-prove: 2026-10-24 13:16 to 18:34 UTC pipeline time, approval 2026-10-25; P-formalize: 2026-10-25 from 12:35 UTC, about six hours of pipeline time (planner 16 min, Opus sessions 31 and 20 min, judge rounds, review about 1 h)"
         spend_usd: "subscription-based"
         hardware: "local machine plus API/subscription model access"
       prompting_notes: >-
         conductor/prove/prompts: independent prover, attempt, adversary (framings refute, reduction, boundary),
         respond, review, reprove, compare, condense, joint. Formal roles (planner, prover, judge, reviewer-formal,
-        statement reconstruction) will be those of conductor/formalize.
+        statement reconstruction) are those of conductor/formalize (conductor/prompts: planner, lean_prover,
+        lean_prover_stream, adversary, reviewer, statement_recon).
   spend_usd: "subscription-based"
   notes: >-
     Challenge.lean definitions and records.yaml were written by Claude (Fable 5.1) in the conductor session that
@@ -105,14 +117,18 @@ automation:
 review:
   status: self-assessed
   reviewers:
-    - "Ben Keene (read GATE_REPORT.md and approved VERIFIED, 2026-10-25; CORRESPONDENCE.md not yet read)"
+    - "Ben Keene (read GATE_REPORT.md and approved VERIFIED, 2026-10-25; the read of CORRESPONDENCE.md for FORMALLY_VERIFIED, gate rule F10, is pending)"
+    - "GPT-6 Astra (formal review in run 2026-10-25_formalize-sinkresetthresholds: adversary and reviewer, framings meaning and trust; both reviewers ACCEPT_WITH_FIXES, confidence 0.98, recommending FORMALLY_VERIFIED; the fixes are documentation, applied in this commit except the Challenge.lean docstring attribution, which waits for a follow-up run)"
     - "GPT-6 Astra (independent prover ind-1; adversary adv-r1, adv-r2, adv-r3.2; reviewer rev-r1, rev-r2, rev-r3.2; re-prover rep-1; 2026-10-24)"
     - "Claude Opus (comparison cmp-1.3 of the two proofs, AGREES; joint integrity read joint-1.2, ACCEPT 0.96; 2026-10-24)"
   notes: >-
     Informal proof: adversary rounds ACCEPT_WITH_FIXES, all findings repaired; final reviewer ACCEPT 0.98 with
     every finding RESOLVED; independent and isolated re-proofs PROVED; gate hard rules PKT, LINK, SM, INTEGRITY
     passed, advisory warnings P2, V1, V2, V5 (reply-format slips and an empty COMPUTATION.md template, none
-    mathematical). Formal statements: no review yet.
+    mathematical). Formal statements and proofs: reviewed in the formalize run (CORRESPONDENCE.md sections 7
+    to 9); findings 20261025T134323 #1-2 and 20261025T135453 #1-2 were documentation defects (this file,
+    CORRESPONDENCE.md, the Challenge.lean docstring's attribution of the Lipin-Volkov conjecture), answered in the
+    packet's RESPONSE_CLAUDE.md and repaired here; no mathematical finding.
 
 known_gaps: []
 
@@ -124,19 +140,19 @@ alignment:
     - source: "Upper bound. Let k ≥ 1 and either k = 1 or n ≤ k + 3. Every n-state A_k automaton with sink 0 has a reset word of length at most f k n = ∑_{i=1}^{n-1} ⌈i/k⌉ (PROOF.md §5, Theorem, upper bound; Proposition 10). [PROOF.md §5 Theorem (upper bound), §3 Proposition 10]"
       lean: "SinkReset.reset_word_le_of_isAk"
       module: "Challenge (statement), Solution (proof)"
-      status: "stated"
+      status: "proved"
     - source: "Lower bound. Let n ≥ 2, k ≥ 1 and either k = 1 or n ≤ k + 3. Some n-state A_k automaton with sink 0 has no reset word shorter than f k n (PROOF.md §5, Theorem, lower bound; Lemmas 12, 13, 14). Together with the upper bound this says M(n,k) = f k n. [PROOF.md §5 Theorem (lower bound), §4 Lemmas 12-14]"
       lean: "SinkReset.exists_isAk_reset_ge"
       module: "Challenge (statement), Solution (proof)"
-      status: "stated"
+      status: "proved"
     - source: "M(5,2) ≤ 6: every 5-state A_2 automaton with sink 0 has a reset word of length at most 6 (CLAIM.md headline; PROOF.md §5, the pair (5,2)). [PROOF.md §5 Theorem, the nine pairs, (5,2)]"
       lean: "SinkReset.five_two_reset_word_le"
       module: "Challenge (statement), Solution (proof)"
-      status: "stated"
+      status: "proved"
     - source: "M(5,2) ≥ 6: some 5-state A_2 automaton with sink 0 has no reset word of length less than 6 (CLAIM.md headline; PROOF.md §4 Lemma 14, the automaton C_{2,2}). [PROOF.md §4 Lemma 14 (C_{2,2}), §5 Theorem]"
       lean: "SinkReset.five_two_exists_isAk_reset_ge"
       module: "Challenge (statement), Solution (proof)"
-      status: "stated"
+      status: "proved"
 
 acknowledgements: >-
   Mathlib and the Lean FRO toolchain (Lean, Lake, lake comparator); the PalomarTemplate verification
