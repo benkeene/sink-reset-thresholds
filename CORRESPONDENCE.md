@@ -34,7 +34,7 @@ Lean statement (Challenge.lean):
 theorem reset_word_le_of_isAk (n k : ℕ) [NeZero n] (hk : 1 ≤ k) (hnk : k = 1 ∨ n ≤ k + 3) (A : Automaton n) (hA : A.IsAk k) : ∃ w, A.IsReset w ∧ w.length ≤ f k n
 ```
 
-Proved in Solution.lean from: (no named declaration)
+Proved in Solution.lean from: `SinkReset.reset_word_le_of_isAk_dev`
 
 Informal ↔ formal argument: `[NeZero n]` is `n ≥ 1` and supplies the sink `0 : Fin n`; `hk : 1 ≤ k` and `hnk : k = 1 ∨ n ≤ k + 3` are the Theorem's hypotheses verbatim (PROOF.md §5: "k ≥ 1", "if k = 1, or n ≤ k + 3"); `A : Automaton n` with `hA : A.IsAk k` is "A is an n-state A_k automaton with sink" (§3); the conclusion `∃ w, A.IsReset w ∧ w.length ≤ f k n` is "rt(A) ≤ f_k(n)", a reset word of length at most f_k(n), with `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉` by §3. The case `n = 1`, which PROOF.md does not state, is harmless: `f k 1 = 0` and the empty word is a reset word. Solution.lean proves it by the term `reset_word_le_of_isAk_dev n k hk hnk A hA`; that `_dev` theorem is `Plan.upper` (SinkReset/Plan.lean:1184, Proposition 10), which follows PROOF.md §3: the reduction to the strongly connected case (`Plan.closed_reduction`, Lemma 3), the strongly connected case itself (`Plan.sc_upper` with `Plan.two_bad`, Proposition 9, which uses Lemmas 5–8) and the classical bound for `k = 1` (`Plan.classical_bound`, Lemma 2). Its axioms are quoted in the §8 row "per-record axioms".
 
@@ -48,7 +48,7 @@ Lean statement (Challenge.lean):
 theorem exists_isAk_reset_ge (n k : ℕ) [NeZero n] (hn : 2 ≤ n) (hk : 1 ≤ k) (hnk : k = 1 ∨ n ≤ k + 3) : ∃ A : Automaton n, A.IsAk k ∧ ∀ w, A.IsReset w → f k n ≤ w.length
 ```
 
-Proved in Solution.lean from: (no named declaration)
+Proved in Solution.lean from: `SinkReset.exists_isAk_reset_ge_dev`
 
 Informal ↔ formal argument: `hn : 2 ≤ n` is the Theorem's `n ≥ 2`, `hk` and `hnk` as above; the conclusion `∃ A : Automaton n, A.IsAk k ∧ ∀ w, A.IsReset w → f k n ≤ w.length` is "some n-state A_k automaton with sink has no reset word shorter than f_k(n)", i.e. rt(A) ≥ f_k(n). It is not vacuous: `Plan.wins_word` (Plan.lean:129, needs `1 ≤ k`) produces a reset word from `IsAk k`, and with the upper record the witness has rt(A) = f_k(n), so the supremum M(n,k) is attained. Solution.lean proves it by `exists_isAk_reset_ge_dev n k hn hk hnk`, which is `Plan.lower` (Plan.lean:2113) specialised (`omega` turns `k = 1 ∨ n ≤ k + 3` into its hypothesis `k = 1 ∨ n ≤ 2 * k + 1`, so the development proves the lower bound on a wider range than the record). The witnesses are PROOF.md §4's: the transposition automaton for `k = 1` (`Plan.transposition_sharp`, Lemma 12), the path automaton for `n ≤ k + 1` (`Plan.path_sharp`, Lemma 13) and the cycle automata C_{k,m} (`Plan.cycle_sharp`, Lemma 14, through the potential bound `Plan.potential_bound`, Lemma 11), with `f` evaluated by `Plan.f_cycle`, `Plan.f_split` (Lemma 4) and `Plan.f_one`.
 
@@ -62,7 +62,7 @@ Lean statement (Challenge.lean):
 theorem five_two_reset_word_le (A : Automaton 5) (hA : A.IsAk 2) : ∃ w, A.IsReset w ∧ w.length ≤ 6
 ```
 
-Proved in Solution.lean from: (no named declaration)
+Proved in Solution.lean from: `SinkReset.five_two_reset_word_le_dev`
 
 Informal ↔ formal argument: the `(5,2)` instance of the upper record: `A : Automaton 5` with `hA : A.IsAk 2` is a 5-state A_2 automaton with sink, and a reset word of length `≤ 6` is rt(A) ≤ 6 = f_2(5) (CLAIM.md headline M(5,2) ≤ 6; PROOF.md §5, the pair (5,2)). Solution.lean proves it by `five_two_reset_word_le_dev A hA`, which applies `reset_word_le_of_isAk_dev 5 2` and rewrites `f 2 5 = 6` by `norm_num [f, Finset.sum_range_succ]`.
 
@@ -76,7 +76,7 @@ Lean statement (Challenge.lean):
 theorem five_two_exists_isAk_reset_ge : ∃ A : Automaton 5, A.IsAk 2 ∧ ∀ w, A.IsReset w → 6 ≤ w.length
 ```
 
-Proved in Solution.lean from: (no named declaration)
+Proved in Solution.lean from: `SinkReset.five_two_exists_isAk_reset_ge_dev`
 
 Informal ↔ formal argument: the `(5,2)` instance of the lower record: a 5-state A_2 automaton with sink none of whose reset words is shorter than `6` (CLAIM.md headline M(5,2) ≥ 6; PROOF.md §4 Lemma 14 and §5, the cycle automaton C_{2,2}, which has `2 + 2 + 1 = 5` states). Solution.lean proves it by `five_two_exists_isAk_reset_ge_dev`, which applies `exists_isAk_reset_ge_dev 5 2` and rewrites `f 2 5 = 6` as above.
 
@@ -273,6 +273,19 @@ is a row with outcome `NOT RUN`.
 
 | date | command | commit | quoted output |
 |---|---|---|---|
+| 2026-10-25 | `lake build` (lake build) | 7980c16efbd4 | exit code 0: Build completed successfully (8966 jobs). (quote `003-lake-build.txt` sha256 0aaf9b27fb65) |
+| 2026-10-25 | `lake build Challenge SinkReset SinkReset.Basic SinkReset.Plan Solution` (lake build) | 7980c16efbd4 | exit code 0: Build completed successfully (8966 jobs). (quote `004-lake-build-modules.txt` sha256 ebc4648c8127) |
+| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-3/inv-1-20261025T134013/audit/job/sweep-solution.lean` (AxiomAudit (axiom sweep)) | 7980c16efbd4 | exit code 0: SWEEP 178 constants checked, 0 flagged (quote `005-sweep-solution.txt` sha256 7d9e04d75ca3) |
+| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-3/inv-1-20261025T134013/audit/job/sweep-challenge.lean` (AxiomAudit (axiom sweep)) | 7980c16efbd4 | exit code 0: BAD_AXIOMS SinkReset.five_two_exists_isAk_reset_ge in Challenge : [sorryAx] ⏎ BAD_AXIOMS SinkReset.exists_isAk_reset_ge in Challenge : [sorryAx] ⏎ BAD_AXIOMS SinkReset.five_two_reset_word_le in Challenge : [sorryAx] ⏎ BAD_AXIOMS SinkReset.reset_word_le_of_isAk in Challenge : [sorryAx] ⏎ SWEEP 36 constants checked, 4 flagged (expected: the record bodies of Challenge.lean are deliberate `sorry`) (quote `006-sweep-challenge.txt` sha256 94c5cd82fa0a) |
+| 2026-10-25 | `lake env leanchecker Challenge` (leanchecker) | 7980c16efbd4 | exit code 0: (no output) (quote `008-leanchecker-Challenge.txt` sha256 509df0d8badc) |
+| 2026-10-25 | `lake env leanchecker Solution` (leanchecker) | 7980c16efbd4 | exit code 0: (no output) (quote `007-leanchecker-Solution.txt` sha256 ea82350cc8b5) |
+| 2026-10-25 | `lake env leanchecker SinkReset.Basic` (leanchecker) | 7980c16efbd4 | exit code 0: (no output) (quote `009-leanchecker-SinkReset.Basic.txt` sha256 3513199e95f9) |
+| 2026-10-25 | `lake env leanchecker SinkReset.Plan` (leanchecker) | 7980c16efbd4 | exit code 0: (no output) (quote `010-leanchecker-SinkReset.Plan.txt` sha256 539e5023262f) |
+| 2026-10-25 | `lake build --no-build Challenge Solution` (statement fidelity (Challenge = Solution)) | 7980c16efbd4 | exit code 0: All targets up-to-date (8965 jobs). (quote `013-fidelity.txt` sha256 9063d7ab1e10) |
+| 2026-10-25 | `lake env leanexport Challenge -- Quot Quot.mk Quot.lift Quot.ind SinkReset.reset_word_le_of_isAk SinkReset.exists_isAk_reset_ge SinkReset.five_two_reset_word_le SinkReset.five_two_exists_isAk_reset_ge propext Classical.c` (statement fidelity (Challenge = Solution)) | 7980c16efbd4 | exit code 0: [14753012 bytes, sha256 72a98b57f7c522b6b1a44e841f3682b8b9afbd86952262499082e5205d2ca770, kept at /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-3/inv-1-20261025T134013/audit/job/fidelity/challenge.ndjson] (quote `014-fidelity.txt` sha256 4a3842e7f4c6) |
+| 2026-10-25 | `lake env leanexport Solution -- Quot Quot.mk Quot.lift Quot.ind SinkReset.reset_word_le_of_isAk SinkReset.exists_isAk_reset_ge SinkReset.five_two_reset_word_le SinkReset.five_two_exists_isAk_reset_ge propext Classical.ch` (statement fidelity (Challenge = Solution)) | 7980c16efbd4 | exit code 0: [37972178 bytes, sha256 ba97d8ff5a75e160fabc9aab526f8e80715fe6a8076a2330c58dcf884259cbd5, kept at /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-3/inv-1-20261025T134013/audit/job/fidelity/solution.ndjson] (quote `015-fidelity.txt` sha256 0eb4b431692f) |
+| 2026-10-25 | `lake env lean --run /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-3/inv-1-20261025T134013/audit/job/fidelity/Fidelity.lean /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize` (statement fidelity (Challenge = Solution)) | 7980c16efbd4 | exit code 0: {"challenge_constants":3868,"detail":"","fidelity":"EQUAL","records":4,"solution_constants":8297,"stage":"done"} (quote `016-fidelity.txt` sha256 40a9bc0dd8b3) |
+| 2026-10-25 | `conductor judge --round` (round-3 verdict, per-record axioms) | 7980c16efbd4 | overall RECORDS_PROVED: SinkReset.reset_word_le_of_isAk: clean, axioms [propext, Classical.choice, Quot.sound] ⏎ SinkReset.exists_isAk_reset_ge: clean, axioms [propext, Classical.choice, Quot.sound] ⏎ SinkReset.five_two_reset_word_le: clean, axioms [propext, Classical.choice, Quot.sound] ⏎ SinkReset.five_two_exists_isAk_reset_ge: clean, axioms [propext, Classical.choice, Quot.sound] (verdict `round-3.verdict.json` sha256 8a431a2511ed) |
 | 2026-10-25 | `git diff --stat 1f2b0df9da90 HEAD -- '*.lean' lakefile.toml lean-toolchain lake-manifest.json comparator.json records.yaml conductor.toml` (Lean sources unchanged since 1f2b0df9da90) | 7980c16efbd4 | rc=0 |
 | 2026-10-25 | `lake build` (lake build) | b1ea5dd6aa1e | exit code 0: Build completed successfully (8966 jobs). (quote `003-lake-build.txt` sha256 fd163b699876) |
 | 2026-10-25 | `lake build Challenge SinkReset SinkReset.Basic SinkReset.Plan Solution` (lake build) | b1ea5dd6aa1e | exit code 0: Build completed successfully (8966 jobs). (quote `004-lake-build-modules.txt` sha256 8dca7494b4c5) |
@@ -285,10 +298,11 @@ is a row with outcome `NOT RUN`.
 
 ## 9. Independent statement reconstruction
 
-- NOT RUN at this commit: the reconstruction runs after this file is committed (`conductor formalize review`). Its record is the run's `review/recon.json` (statements, hashes, breach scan, per-record AGREES/DIFFERS), and `conductor formalize gate` refuses to hand off unless it AGREES with every record.
+- `statement-recon-claim-0001` (sinkresetthresholds/20261025T140743_statement-recon-statement-recon-claim-0001): transcript `/Users/ben/conductor-lab/agents/astra/transcripts/20261025T140743_statement_recon_claim_0001_statement-recon-claim-0001.md` sha256 `70ddf53e23021b83`, isolation_mode `instruction-only`, status completed.
 
 Lean check of the reconstruction's equivalence with the statements of record: NOT RUN (not built in conductor v1; a human compares the statements above with §2).
 
 ## 10. Source provenance
 
 Generated from the conductor template; Palomar scripts in `scripts/` (see `scripts/README.md`).
+
