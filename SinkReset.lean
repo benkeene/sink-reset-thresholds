@@ -6,3 +6,4 @@ Authors: Ben Keene
 module
 
 public import SinkReset.Basic
+public import SinkReset.Plan
