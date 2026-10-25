@@ -106,18 +106,18 @@ commit, from run.json (`conductor formalize correspondence`); edit the run, not 
 | `SinkReset.Plan.Z` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.Y` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.Distances` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
-| `SinkReset.Plan.act_append` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.word_append` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.act_zero` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.act_append` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.word_append` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.act_zero` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
 | `SinkReset.Plan.image_active_le` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.kill_decreases` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.within_compose` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.within_univ` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
-| `SinkReset.Plan.wins_mono` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.wins_mono` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
 | `SinkReset.Plan.wins_word` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
-| `SinkReset.Plan.one_game_iff` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.bob_first_iff` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.trap` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.one_game_iff` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.bob_first_iff` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.trap` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
 | `SinkReset.Plan.wins_of_rank` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.distances_exist` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.reachable_reset` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
@@ -125,15 +125,15 @@ commit, from run.json (`conductor formalize correspondence`); edit the run, not 
 | `SinkReset.Plan.distance_Y` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.short_kill` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.classical_bound` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
-| `SinkReset.Plan.lift_word` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.wins_push` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.wins_pull` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.lift_word` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.wins_push` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.wins_pull` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
 | `SinkReset.Plan.closed_set_of_not_sc` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
-| `SinkReset.Plan.closed_reduction` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.f_one` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.f_small` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.f_cycle` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.Plan.f_split` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.closed_reduction` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_one` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_small` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_cycle` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.f_split` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
 | `SinkReset.Plan.escape_to_Y` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.few_bad` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.no_return` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
@@ -167,15 +167,18 @@ commit, from run.json (`conductor formalize correspondence`); edit the run, not 
 | `SinkReset.Plan.cycle_wins` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.cycle_loses` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
 | `SinkReset.Plan.cycle_sharp` | Claude Opus 5.5 (high) | opus-A-r1-s3 | 1 | 1f2b0df9da90 |
-| `SinkReset.Plan.lower` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.reset_word_le_of_isAk_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.exists_isAk_reset_ge_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.five_two_reset_word_le_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
-| `SinkReset.five_two_exists_isAk_reset_ge_dev` | conductor (human session; no model) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.Plan.lower` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.reset_word_le_of_isAk_dev` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.exists_isAk_reset_ge_dev` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.five_two_reset_word_le_dev` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
+| `SinkReset.five_two_exists_isAk_reset_ge_dev` | operator (human session; no model; see the note below) | human-A-r1-h1 | 1 | 3f354441fbad |
 | `SinkReset.reset_word_le_of_isAk` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
 | `SinkReset.exists_isAk_reset_ge` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
 | `SinkReset.five_two_reset_word_le` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
 | `SinkReset.five_two_exists_isAk_reset_ge` (statement of record; Solution.lean bridge) | plan materialization (see plan/plan_map.json) | sinkresetthresholds/20261025T083649_planner-planner-claim-0001, plan-materialize-1, plan-materialize-3, plan-materialize-4 | — | e623d0fcef39 |
+
+Human sessions (commits made by hand on a stream worktree, judged like a session):
+- `human-A-r1-h1` (3f354441fbad): opus-A-r1-s1's commit 0158e05, rejected only for its added section/variable/omit commands and a judge bug on sorry-bodied definitions; binders made explicit by hand, same proofs
 <!-- conductor:provenance:end -->
 
 ## 8. Build and audit record
@@ -186,14 +189,14 @@ is a row with outcome `NOT RUN`.
 
 | date | command | commit | quoted output |
 |---|---|---|---|
-| 2026-10-25 | `lake build` (lake build) | 1f2b0df9da90 | exit code 0: Build completed successfully (8966 jobs). (quote `003-lake-build.txt` sha256 653688f25e69) |
-| 2026-10-25 | `lake build Challenge SinkReset SinkReset.Basic SinkReset.Plan Solution` (lake build) | 1f2b0df9da90 | exit code 0: Build completed successfully (8966 jobs). (quote `004-lake-build-modules.txt` sha256 fdf3bfaac3b9) |
-| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-1/inv-1-20261025T133338/audit/job/sweep-solution.lean` (AxiomAudit (axiom sweep)) | 1f2b0df9da90 | exit code 0: {"caption":"","data":"TYPE SinkReset.five_two_reset_word_le : ∀\n  (A :\n    @SinkReset.Automaton (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))))\n  (hA :\n    @SinkReset.Automaton.IsAk (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0}  (quote `005-sweep-solution.txt` sha256 57495a71567e) |
-| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-1/inv-1-20261025T133338/audit/job/sweep-challenge.lean` (AxiomAudit (axiom sweep)) | 1f2b0df9da90 | exit code 0: {"caption":"","data":"BAD_AXIOMS SinkReset.exists_isAk_reset_ge in Challenge : [sorryAx]","endPos":{"column":7,"line":31},"fileName":"/Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-1/inv-1-20261025T133338/audit/job/sweep-challenge.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":31},"severity":"information"} ⏎ {"captio (quote `006-sweep-challenge.txt` sha256 b8c2e057c724) |
-| 2026-10-25 | `lake env leanchecker SinkReset.Basic` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `008-leanchecker-SinkReset.Basic.txt` sha256 0a6c4d300070) |
-| 2026-10-25 | `lake env leanchecker Solution` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `007-leanchecker-Solution.txt` sha256 d4d2c05a57fc) |
-| 2026-10-25 | `lake env leanchecker Challenge` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `009-leanchecker-Challenge.txt` sha256 090139637726) |
-| 2026-10-25 | `lake env leanchecker SinkReset.Plan` (leanchecker) | 1f2b0df9da90 | exit code 0: (no output) (quote `010-leanchecker-SinkReset.Plan.txt` sha256 41368e23ae73) |
+| 2026-10-25 | `lake build` (lake build) | b1ea5dd6aa1e | exit code 0: Build completed successfully (8966 jobs). (quote `003-lake-build.txt` sha256 fd163b699876) |
+| 2026-10-25 | `lake build Challenge SinkReset SinkReset.Basic SinkReset.Plan Solution` (lake build) | b1ea5dd6aa1e | exit code 0: Build completed successfully (8966 jobs). (quote `004-lake-build-modules.txt` sha256 8dca7494b4c5) |
+| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-2/inv-1-20261025T133626/audit/job/sweep-solution.lean` (AxiomAudit (axiom sweep)) | b1ea5dd6aa1e | exit code 0: {"caption":"","data":"TYPE SinkReset.five_two_reset_word_le : ∀\n  (A :\n    @SinkReset.Automaton (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))))\n  (hA :\n    @SinkReset.Automaton.IsAk (@OfNat.ofNat.{0} Nat (nat_lit 5) (instOfNatNat (nat_lit 5)))\n      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0}  (quote `005-sweep-solution.txt` sha256 5d908ac78e69) |
+| 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-2/inv-1-20261025T133626/audit/job/sweep-challenge.lean` (AxiomAudit (axiom sweep)) | b1ea5dd6aa1e | exit code 0: {"caption":"","data":"BAD_AXIOMS SinkReset.exists_isAk_reset_ge in Challenge : [sorryAx]","endPos":{"column":7,"line":31},"fileName":"/Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-2/inv-1-20261025T133626/audit/job/sweep-challenge.lean","isSilent":false,"keepFullRange":false,"kind":"[anonymous]","pos":{"column":0,"line":31},"severity":"information"} ⏎ {"captio (quote `006-sweep-challenge.txt` sha256 71b11ea795c6) |
+| 2026-10-25 | `lake env leanchecker SinkReset.Basic` (leanchecker) | b1ea5dd6aa1e | exit code 0: (no output) (quote `007-leanchecker-SinkReset.Basic.txt` sha256 690fb23f0177) |
+| 2026-10-25 | `lake env leanchecker Solution` (leanchecker) | b1ea5dd6aa1e | exit code 0: (no output) (quote `008-leanchecker-Solution.txt` sha256 48b4d3675cc9) |
+| 2026-10-25 | `lake env leanchecker Challenge` (leanchecker) | b1ea5dd6aa1e | exit code 0: (no output) (quote `009-leanchecker-Challenge.txt` sha256 6e33871bd44e) |
+| 2026-10-25 | `lake env leanchecker SinkReset.Plan` (leanchecker) | b1ea5dd6aa1e | exit code 0: (no output) (quote `010-leanchecker-SinkReset.Plan.txt` sha256 b492633f8f40) |
 
 ## 9. Independent statement reconstruction
 
