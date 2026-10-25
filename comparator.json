@@ -1,0 +1,15 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "SinkReset.reset_word_le_of_isAk",
+    "SinkReset.exists_isAk_reset_ge",
+    "SinkReset.five_two_reset_word_le",
+    "SinkReset.five_two_exists_isAk_reset_ge"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ]
+}

@@ -1,0 +1,43 @@
+schema: conductor/records/1
+project:
+  name: "Sharp reset thresholds for bounded-response synchronization games with a sink"
+  slug: sink-reset-thresholds
+  library: SinkReset
+  namespace: SinkReset
+  licence: Apache-2.0
+  authors: ["Ben Keene"]
+  summary: "M(n,k) = sum_{i=1}^{n-1} ceil(i/k) for k = 1 or n <= k+3; in particular M(5,2) = 6."
+  github_owner: benkeene
+  status: VERIFIED
+toolchain: "leanprover/lean4:v4.35.0-rc3"
+challenge_imports: [Mathlib]
+permitted_axioms: [propext, Quot.sound, Classical.choice]
+records:
+  - name: SinkReset.reset_word_le_of_isAk
+    statement: "Upper bound. Let k ≥ 1 and either k = 1 or n ≤ k + 3. Every n-state A_k automaton with sink 0 has a reset word of length at most f k n = ∑_{i=1}^{n-1} ⌈i/k⌉ (PROOF.md §5, Theorem, upper bound; Proposition 10)."
+    challenge_module: Challenge
+    solution_module: Solution
+    informal_ref: "PROOF.md §5 Theorem (upper bound), §3 Proposition 10"
+    kind: record
+    signature: "(n k : ℕ) [NeZero n] (hk : 1 ≤ k) (hnk : k = 1 ∨ n ≤ k + 3) (A : Automaton n) (hA : A.IsAk k) : ∃ w, A.IsReset w ∧ w.length ≤ f k n"
+  - name: SinkReset.exists_isAk_reset_ge
+    statement: "Lower bound. Let n ≥ 2, k ≥ 1 and either k = 1 or n ≤ k + 3. Some n-state A_k automaton with sink 0 has no reset word shorter than f k n (PROOF.md §5, Theorem, lower bound; Lemmas 12, 13, 14). Together with the upper bound this says M(n,k) = f k n."
+    challenge_module: Challenge
+    solution_module: Solution
+    informal_ref: "PROOF.md §5 Theorem (lower bound), §4 Lemmas 12-14"
+    kind: record
+    signature: "(n k : ℕ) [NeZero n] (hn : 2 ≤ n) (hk : 1 ≤ k) (hnk : k = 1 ∨ n ≤ k + 3) : ∃ A : Automaton n, A.IsAk k ∧ ∀ w, A.IsReset w → f k n ≤ w.length"
+  - name: SinkReset.five_two_reset_word_le
+    statement: "M(5,2) ≤ 6: every 5-state A_2 automaton with sink 0 has a reset word of length at most 6 (CLAIM.md headline; PROOF.md §5, the pair (5,2))."
+    challenge_module: Challenge
+    solution_module: Solution
+    informal_ref: "PROOF.md §5 Theorem, the nine pairs, (5,2)"
+    kind: record
+    signature: "(A : Automaton 5) (hA : A.IsAk 2) : ∃ w, A.IsReset w ∧ w.length ≤ 6"
+  - name: SinkReset.five_two_exists_isAk_reset_ge
+    statement: "M(5,2) ≥ 6: some 5-state A_2 automaton with sink 0 has no reset word of length less than 6 (CLAIM.md headline; PROOF.md §4 Lemma 14, the automaton C_{2,2})."
+    challenge_module: Challenge
+    solution_module: Solution
+    informal_ref: "PROOF.md §4 Lemma 14 (C_{2,2}), §5 Theorem"
+    kind: record
+    signature: ": ∃ A : Automaton 5, A.IsAk 2 ∧ ∀ w, A.IsReset w → 6 ≤ w.length"
