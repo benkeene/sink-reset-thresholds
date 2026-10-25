@@ -120,7 +120,7 @@ is a row with outcome `NOT RUN`.
 | 2026-10-25 | `ruby scripts/validate-formalization.rb` | 4854121 | `formalization.yaml contains no TEMPLATE values; exit 0` |
 | 2026-10-25 | `python3 -I scripts/check-lean-sources.py` | 4854121 | `Lean source requirements satisfied; exit 0` |
 | 2026-10-25 | `uv run conductor package check ~/sink-reset-thresholds (from ~/conductor)` | 4854121 | `check: OK (0 drift findings); exit 0` |
-| 2026-10-25 | `uv run conductor lean probe fidelity --tree ~/sink-reset-thresholds` (from ~/conductor) | 4854121 (identical tree, run before the commit) | `exit 0; "fidelity":"MISMATCH"; "detail":"Illegal axiom detected: 'sorryAx'"; job ~/.cache/conductor/sinkresetthresholds/fidelity/20261025T083324-303708` |
+| 2026-10-25 | `uv run conductor lean probe fidelity --tree ~/sink-reset-thresholds` (from ~/conductor) | 4854121 (identical tree, run before the commit) | `"fidelity":"MISMATCH"`, `"detail":"Illegal axiom detected: 'sorryAx'"` (job `~/.cache/conductor/sinkresetthresholds/fidelity/20261025T083324-303708`; the exit code was not captured, a pipe hid it). Expected: Solution.lean still proves every record by `sorry`; the row stays until a sorry-free Solution is probed |
 
 ## 9. Independent statement reconstruction
 
