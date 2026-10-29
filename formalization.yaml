@@ -8,7 +8,7 @@ version: "v0.4"
 
 project:
   name: "Sharp reset thresholds for bounded-response synchronization games with a sink"
-  description: "Lean 4 / Mathlib statements of the theorem M(n,k) = sum_{i=1}^{n-1} ceil(i/k) for k = 1 or n <= k+3 (Lipin-Volkov k-game on automata with a sink), rendered as an upper and a lower bound, with the headline case M(5,2) = 6, proved in Solution.lean from the development SinkReset.Plan written in the conductor formalize run 2026-10-25_formalize-sinkresetthresholds."
+  description: "Lean 4 / Mathlib statements of the theorem M(n,k) = sum_{i=1}^{n-1} ceil(i/k) for k = 1 or n <= k+3 (Lipin-Volkov k-game on automata with a sink), rendered as an upper and a lower bound, with the headline case M(5,2) = 6, proved in Solution.lean from the development SinkReset.Plan written in the conductor formalize run 2026-10-25_formalize-sinkresetthresholds. The endpoints k = 1 (Rystsov's tight bound n(n-1)/2) and k = n-1 were known from Lipin-Volkov; the new content is M(k+2,k) = k+2 and M(k+3,k) = k+4 for k >= 2, including the non-divisible pairs (4,2) and (5,3), which the Lipin-Volkov conjecture (stated for k | n-1 only) does not cover; (5,2) is the first pair that is neither endpoint."
   authors:
     - "Ben Keene"
   license: "Apache-2.0"
@@ -117,8 +117,8 @@ automation:
 review:
   status: self-assessed
   reviewers:
-    - "Ben Keene (read GATE_REPORT.md and approved VERIFIED, 2026-10-25; the read of CORRESPONDENCE.md for FORMALLY_VERIFIED, gate rule F10, is pending)"
-    - "GPT-6 Astra (formal review in run 2026-10-25_formalize-sinkresetthresholds: adversary and reviewer, framings meaning and trust; both reviewers ACCEPT_WITH_FIXES, confidence 0.98, recommending FORMALLY_VERIFIED; the fixes are documentation, applied in this commit except the Challenge.lean docstring attribution, which waits for a follow-up run)"
+    - "Ben Keene (read GATE_REPORT.md and approved VERIFIED, 2026-10-25; read CORRESPONDENCE.md in full, 2026-10-26, and approved FORMALLY_VERIFIED the same day, gate rule F10, at commit 1eed040421fe0121e8bfaceb8cc4d35653531314)"
+    - "GPT-6 Astra (formal review in run 2026-10-25_formalize-sinkresetthresholds: adversary and reviewer, framings meaning and trust; both reviewers ACCEPT_WITH_FIXES, confidence 0.98, recommending FORMALLY_VERIFIED; the fixes are documentation, all applied: this file and CORRESPONDENCE.md at commit 0adf35d, the Challenge.lean module docstring attribution at commit d041020a04af)"
     - "GPT-6 Astra (independent prover ind-1; adversary adv-r1, adv-r2, adv-r3.2; reviewer rev-r1, rev-r2, rev-r3.2; re-prover rep-1; 2026-10-24)"
     - "Claude Opus (comparison cmp-1.3 of the two proofs, AGREES; joint integrity read joint-1.2, ACCEPT 0.96; 2026-10-24)"
   notes: >-

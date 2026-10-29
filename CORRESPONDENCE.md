@@ -1,12 +1,14 @@
 # Correspondence: informal statements ↔ formal statements
 
-Status (2026-10-25): the four statements of record are proved. Each is stated in `Challenge.lean` (record
+Status (2026-10-29): the four statements of record are proved; the lab packet claim_0001 is FORMALLY_VERIFIED
+(approved 2026-10-26 at commit 1eed040421fe after Ben Keene read this file, gate rule F10). Each is stated in `Challenge.lean` (record
 bodies deliberately `sorry`, checked against `Solution.lean` by the comparator) and proved in `Solution.lean` by
 one term naming its `_dev` copy in `SinkReset/Plan.lean`, whose development was written in the P-formalize run
 `2026-10-25_formalize-sinkresetthresholds` (§7 says by whom, declaration by declaration). Every check that ran is
 a row of §8, each naming the commit it ran at; the Lean sources, lakefile, toolchain, manifest, comparator,
-`records.yaml` and `conductor.toml` have not changed since commit 1f2b0df9da90 (the §8 row quoting
-`git diff --stat` shows the empty diff), so a row at any later commit covers these sources. Nothing in this file
+`records.yaml` and `conductor.toml` have not changed since commit 1f2b0df9da90 except the module docstring of
+`Challenge.lean` (commit d041020a04af; the §8 rows quoting `git diff --stat` show the empty diff up to 1eed040421fe
+and the docstring-only diff after it), so a row at any later commit covers these sources. Nothing in this file
 may describe a build, count or check except by quoting the command and its output.
 
 ## 1. Informal statements and status
@@ -167,9 +169,9 @@ Attribution. Lipin–Volkov (arXiv:2601.18362 §3.4) conjecture `M(n,k) = (n-1+k
 on that domain this equals `f k n`. The records settle the conjecture's cases with `k ∣ n-1` and (`k = 1` or
 `n ≤ k + 3`), and the stronger ceiling-sum form `M(n,k) = f k n`, which Lipin–Volkov exhibit as a lower bound but do
 not conjecture, for every `k = 1` or `n ≤ k + 3` (for instance `(4,2)`, where `2 ∤ 3`). The module docstring of
-`Challenge.lean` (lines 20–21 and 35) states the attribution without this restriction; `Challenge.lean` is frozen
-for the formalize run (gate rule F4 pins its hash), so the docstring is corrected in a follow-up run. No statement of
-record, definition or proof is affected.
+`Challenge.lean` stated the attribution without this restriction until commit d041020a04af, which corrects it and
+names the new pairs (docstring only; §8 quotes the diff). Gate rule F4 pins the Challenge hash, so that commit needs
+the follow-up formalize judgment that re-pins it. No statement of record, definition or proof is affected.
 
 ## 6. Toolchain
 
@@ -273,6 +275,15 @@ is a row with outcome `NOT RUN`.
 
 | date | command | commit | quoted output |
 |---|---|---|---|
+| 2026-10-29 | `git diff --stat 1f2b0df9da90 d041020a04af -- '*.lean' lakefile.toml lean-toolchain lake-manifest.json comparator.json records.yaml conductor.toml` (Lean sources since 1f2b0df9da90: Challenge.lean module docstring only) | d041020a04af | ` Challenge.lean \| 20 +++++++++++++------- ⏎ 1 file changed, 13 insertions(+), 7 deletions(-)`; `git diff 1f2b0df9da90 d041020a04af -- Challenge.lean \| grep -E '^[-+][^-+]'`: 20 lines (7 removed, 13 added), all inside the `/-! ... -/` module docstring (file lines 18–27 and 37–39); no declaration, signature, docstring of a definition or record changed |
+| 2026-10-29 | `lake build Challenge` (lake build) | d041020a04af | exit code 0: Build completed successfully (8960 jobs). (longLine linter warnings only) |
+| 2026-10-26 | `lake build` (lake build; P-audit clone at this commit) | 1eed040421fe | rc=0 seconds=26.70 (audit quote `003-lake-build.txt`) |
+| 2026-10-26 | `lake env lean --json <audit>/job/sweep-solution.lean` (AxiomAudit (axiom sweep); P-audit) | 1eed040421fe | exit code 0: SWEEP 178 constants checked, 0 flagged (audit quote `005-sweep-solution.txt`) |
+| 2026-10-26 | `lake env lean --json <audit>/job/sweep-challenge.lean` (AxiomAudit (axiom sweep); P-audit) | 1eed040421fe | exit code 0: SWEEP 36 constants checked, 4 flagged (the four deliberate `sorry` record bodies of Challenge.lean; audit quote `006-sweep-challenge.txt`) |
+| 2026-10-26 | `lake env leanchecker SinkReset.Basic`; `lake env leanchecker Challenge`; `lake env leanchecker Solution`; `lake env leanchecker SinkReset.Plan` (leanchecker, one call per module; P-audit) | 1eed040421fe | rc=0 seconds=18.25 ⏎ rc=0 seconds=18.25 ⏎ rc=0 seconds=18.25 ⏎ rc=0 seconds=19.45 (audit quotes `007`–`010`) |
+| 2026-10-26 | `lake env lean --run <audit>/job/fidelity/Fidelity.lean <audit>/job/fidelity/fidelity-config.json` (statement fidelity (Challenge = Solution); P-audit) | 1eed040421fe | {"challenge_constants":3868,"detail":"","fidelity":"EQUAL","records":4,"solution_constants":8297,"stage":"done"} ⏎ rc=0 seconds=7.39 (audit quote `016-fidelity.txt`) |
+| 2026-10-26 | `conductor audit <clone>` (lean-cheat-check ladder, mode full, allowlist propext, Classical.choice, Quot.sound) | 1eed040421fe | 1 static scan: 0 C / 0 H / 4 M (the four deliberate sorries) ⏎ 2 axiom sweep: 178 checked, 0 flagged ⏎ 3 kernel replay: rc 0 on 4/4 modules ⏎ 4 fidelity: type hashes equal 4/4; structural EQUAL; list-order ok ⏎ VERDICT: CLEAN (not checked: leanchecker --fresh, independent kernels, comparator CI; see the CI row) |
+| 2026-10-26 | `./scripts/verify-comparator.sh` (CI job "Check statement against solution", GitHub Actions run 40323934155, https://github.com/benkeene/sink-reset-thresholds/actions/runs/40323934155) | 1eed040421fe | con-ron: accepted 7556 declarations (--verified) ⏎ con-ron kernel accepts the solution ⏎ nanoda kernel accepts the solution ⏎ Your solution is okay! ⏎ jobs: Check metadata and Apache licence: success; Check where the README sends a submitter: success; Build with Lean: success; Check statement against solution: success |
 | 2026-10-25 | `lake build` (lake build) | 7980c16efbd4 | exit code 0: Build completed successfully (8966 jobs). (quote `003-lake-build.txt` sha256 0aaf9b27fb65) |
 | 2026-10-25 | `lake build Challenge SinkReset SinkReset.Basic SinkReset.Plan Solution` (lake build) | 7980c16efbd4 | exit code 0: Build completed successfully (8966 jobs). (quote `004-lake-build-modules.txt` sha256 ebc4648c8127) |
 | 2026-10-25 | `lake env lean --json /Users/ben/.cache/conductor/judge-out/2026-10-25_formalize-sinkresetthresholds/round-3/inv-1-20261025T134013/audit/job/sweep-solution.lean` (AxiomAudit (axiom sweep)) | 7980c16efbd4 | exit code 0: SWEEP 178 constants checked, 0 flagged (quote `005-sweep-solution.txt` sha256 7d9e04d75ca3) |
@@ -298,9 +309,31 @@ is a row with outcome `NOT RUN`.
 
 ## 9. Independent statement reconstruction
 
-- `statement-recon-claim-0001` (sinkresetthresholds/20261025T140743_statement-recon-statement-recon-claim-0001): transcript `/Users/ben/conductor-lab/agents/astra/transcripts/20261025T140743_statement_recon_claim_0001_statement-recon-claim-0001.md` sha256 `70ddf53e23021b83`, isolation_mode `instruction-only`, status completed.
+Two isolated GPT-6 Astra reconstructions of the statements of record from the informal text, in run
+`2026-10-25_formalize-sinkresetthresholds` (`conductor formalize review`, then `review --recon-only`), each compared
+with the records by a Claude Opus comparer. Isolation mode `instruction-only`, breach scan clean. The transcripts stay
+in the lab and are identified here by sha256; the per-record comparison is the run's `review/recon.json` and
+`review.json` (`recon_record.comparison`).
 
-Lean check of the reconstruction's equivalence with the statements of record: NOT RUN (not built in conductor v1; a human compares the statements above with §2).
+- `statement-recon-claim-0001` (job 20261025T140743, at commit 7980c16efbd4): transcript sha256 `70ddf53e23021b83`,
+  status completed. Comparison `recon-compare-1`: AGREES on `exists_isAk_reset_ge`, `five_two_reset_word_le` and
+  `five_two_exists_isAk_reset_ge`; DIFFERS on `reset_word_le_of_isAk`, because the comparer was shown the statement
+  blocks only: the record carries `[NeZero n]` and the reconstruction's statement has no `n ≥ 1` hypothesis, although
+  its own `Automaton` has a field `sink : Fin n`, which forces `n ≥ 1`. Superseded by the rerun below.
+- `statement-recon-claim-0001-2` (job 20261026T081643, at commit 1eed040421fe; fresh key, the comparer now shown both
+  sides' definitions): transcript sha256 `50d93c6f1cf850fa`, statement sha256 `a769cbdb403f8d3d`, isolation breach
+  false. Comparison `recon-compare-2`:
+  - `SinkReset.reset_word_le_of_isAk`: AGREES
+  - `SinkReset.exists_isAk_reset_ge`: AGREES
+  - `SinkReset.five_two_reset_word_le`: AGREES
+  - `SinkReset.five_two_exists_isAk_reset_ge`: AGREES
+
+The second reconstruction ran at commit 1eed040421fe; the §8 row quoting `git diff --stat` shows that the only later
+change to a Lean source is the `Challenge.lean` module docstring, so its comparison covers the statements of record at
+this commit.
+
+Lean check of the reconstruction's equivalence with the statements of record: NOT RUN (not built in conductor v1; a
+human compares the statements above with §2).
 
 ## 10. Source provenance
 

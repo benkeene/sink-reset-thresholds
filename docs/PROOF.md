@@ -1,11 +1,12 @@
 # Informal proof (proof of record)
 
-This file is the VERIFIED packet's `PROOF.md` of claim_0001 (lab `~/conductor-lab/agents/shared/claim_0001`,
+This file is the VERIFIED packet's `PROOF.md` of claim_0001 (lab packet `claim_0001`,
 prove run `2026-10-24_prove-claim-0001`, approved 2026-10-25), copied verbatim below the rule. The statements of
 record in `records.yaml` cite its sections: the upper bound is §5 Theorem with §3 Proposition 10; the lower bound is
 §5 Theorem with §4 Lemmas 12, 13, 14; the pair `(5,2)` is the §5 Theorem's list of nine pairs, with the automaton
 `C_{2,2}` of Lemma 14. Appendix B (packet errata) has been applied to the copies `docs/CLAIM.md`,
-`docs/CONTEXT.md` and `docs/COMPUTATION.md` in this repository; the packet files themselves are unchanged.
+`docs/CONTEXT.md` and `docs/COMPUTATION.md` in this repository; the packet files themselves are unchanged. One bullet of Appendix A, naming the local directory of the computational
+record, is omitted from this copy; the files are identified by name and SHA-256.
 
 ---
 
@@ -385,14 +386,14 @@ $f_3(5)=1+1+1+2=5$, $f_4(5)=4$. $\square$
 This appendix records the earlier exhaustive computation that CLAIM.md refers to. It is included because
 COMPUTATION.md in the packet is an empty template. Nothing above depends on it.
 
-* **Location.** `/Users/ben/conductor-lab/agents/runs/2026-10-24_research-sink-ak-small/isolated/audit-1/`.
 * **Verifier.** `verifier__verify.py`, SHA-256 `456ff3770a2f5256a23d8732f217fd87d40ad6eb21c14d43b202b42b53ff9c7f`.
 * **Certificate.** `experiment__out__cert.json`, SHA-256
   `72af5a40653bb796a3132ede643129ef81ea718b33b71e18905dfdc0cf36ceb5`.
 * **Stored verification record.** `verifier__results__20261024T083044703883.json` (lines 6–12 hold the two hashes
   above and the PASS outcome).
 * **Reproduction.** Run from any directory:
-  `python3 -I -B <dir>/verifier__verify.py <dir>/experiment__out__cert.json`, where `<dir>` is the location above.
+  `python3 -I -B <dir>/verifier__verify.py <dir>/experiment__out__cert.json`, where `<dir>` is the directory holding the verifier and the certificate (the lab's research-run audit
+  directory; it is not part of this repository).
   Expected exit status is 0, with the single output line
   `PASS M(n,k) = sum_i ceil(i/k) for all 9 cases 3<=n<=5, 1<=k<=n-1; 72 witnesses checked; every maximum recomputed exhaustively over all alphabets of <= n-1 letters (n<=4 by two engines; n=5 bit-parallel)`.
 * **What it checks.** The verifier imports no searcher code. It recomputes every maximum exhaustively

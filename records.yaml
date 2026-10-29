@@ -8,7 +8,7 @@ project:
   authors: ["Ben Keene"]
   summary: "M(n,k) = sum_{i=1}^{n-1} ceil(i/k) for k = 1 or n <= k+3; in particular M(5,2) = 6."
   github_owner: benkeene
-  status: VERIFIED
+  status: FORMALLY_VERIFIED
 toolchain: "leanprover/lean4:v4.35.0-rc3"
 challenge_imports: [Mathlib]
 permitted_axioms: [propext, Quot.sound, Classical.choice]

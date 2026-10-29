@@ -5,7 +5,10 @@ Sharp reset thresholds for bounded-response synchronization games with a sink �
 Lean statements of the theorem of `docs/PROOF.md` §5: for `k = 1` or `n ≤ k + 3`, every `n`-state `A_k`
 automaton with a sink has a reset word of length at most `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉`, and some such automaton has
 none shorter; in particular `M(5,2) = 6`. The informal proof is the VERIFIED packet claim_0001 of the conductor lab
-(cases of the Lipin–Volkov conjecture, arXiv:2601.18362, and of its ceiling-sum form). The four statements of record
+(cases of the Lipin–Volkov conjecture, arXiv:2601.18362, and of its ceiling-sum form). What is new: the endpoints
+`k = 1` (Rystsov's bound) and `k = n - 1` were known; the theorem adds `M(k+2,k) = k+2` and `M(k+3,k) = k+4` for
+`k ≥ 2`, including the non-divisible pairs `(4,2)` and `(5,3)`, which the Lipin–Volkov conjecture (stated for
+`k ∣ n-1` only) does not cover. The four statements of record
 are proved in `Solution.lean` from the development `SinkReset/Plan.lean`; every statement about a build or check
 points at a quoted row of `CORRESPONDENCE.md` §8 ("Build and audit record").
 
@@ -51,7 +54,10 @@ TODO: filled after registration (entry id, version, pinned commit, citation).
 ## Submission
 
 Palomar submissions go through https://submit.palomar-registry.org/ with the full 40-character commit SHA.
-Before submitting, run `conductor package checklist .` and tick every item with a quoted output.
+Before submitting, run `conductor package checklist .` and tick every item with a quoted output (`docs/CHECKLIST.md`),
+then run the Palomar mechanical preflight once on the commit to submit: the manual workflow
+`.github/workflows/palomar-preflight.yml` calls Palomar's reusable submission workflow in full mode (the repository
+must be public for it to run; the repository's own CI is not equivalent). Submit only on `status: pass`.
 
 ## License
 
