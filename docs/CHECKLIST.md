@@ -111,11 +111,31 @@ so items 1–7 cover the Lean sources of every later docs commit. Items 13–15 
       expect:  formalization.yaml contains no TEMPLATE values
       quoted output (2026-10-29):
         formalization.yaml contains no TEMPLATE values
-- [ ] 13. All four CI jobs green on the commit to submit  (pipeline)
+- [x] 13. All four CI jobs green on the commit to submit  (pipeline)
       command: gh run list --commit <full sha> --json name,conclusion
       expect:  license, submission-link, build, comparator: success
-      (At 1eed040421fe: run 40323934155, all four jobs success. Re-quote for the commit to submit, then run the
-      `Palomar preflight` workflow on it and quote `status: pass`.)
+      quoted output (45e27e9b2c010e38efd2fda806132e10248724ee; https://github.com/benkeene/sink-reset-thresholds/actions/runs/40926409694):
+        $ gh run view 40926409694 --json conclusion,jobs --jq '.conclusion, (.jobs[] | "\(.name): \(.conclusion)")'
+        success
+        Check metadata and Apache licence: success
+        Build with Lean: success
+        Check where the README sends a submitter: success
+        Check statement against solution: success
+        con-ron: accepted 7556 declarations (--verified)
+        con-ron kernel accepts the solution
+        nanoda kernel accepts the solution
+        Lean default kernel accepts the solution
+        Your solution is okay!
+      quoted output (45e27e9b2c010e38efd2fda806132e10248724ee; standalone milestone judge round, `conductor judge --round 1 --tree . --bootstrap 45e27e9b2c010e38efd2fda806132e10248724ee`):
+        overall: RECORDS_PROVED result_sha: 45e27e9b2c010e38efd2fda806132e10248724ee
+        SinkReset.reset_word_le_of_isAk clean ['propext', 'Classical.choice', 'Quot.sound']
+        SinkReset.exists_isAk_reset_ge clean ['propext', 'Classical.choice', 'Quot.sound']
+        SinkReset.five_two_reset_word_le clean ['propext', 'Classical.choice', 'Quot.sound']
+        SinkReset.five_two_exists_isAk_reset_ge clean ['propext', 'Classical.choice', 'Quot.sound']
+        records_challenge_eq_solution: all four True; records_eq_bootstrap: all four True; leanchecker rc 0 on Challenge, SinkReset.Basic, SinkReset.Plan, Solution; fidelity: structural EQUAL; VERDICT: CLEAN
+      The commit to submit is the one that adds this quote; it differs from 45e27e9b2c010e38efd2fda806132e10248724ee only in
+      docs/CHECKLIST.md (`git diff --stat 45e27e9 HEAD` names that one file), so no Lean source, workflow or metadata
+      file changed after the quoted run. CI runs again on the commit to submit; its run appears on the Actions page.
 - [ ] 14. Make the repository public  (human (Ben))
       command: (Ben) GitHub settings; never by conductor
       expect:  —
