@@ -14,11 +14,16 @@ public import Mathlib
 /-!
 # Sharp reset thresholds for bounded-response synchronization games with a sink
 
-Lipin and Volkov (Adversarial Synchronization, arXiv:2601.18362) define the `k`-game on an automaton with a
-sink: Alice plays a letter, Bob replies with any word of length `< k`, and Alice wins when the history is a
-reset word. `A_k` automata are those Alice wins; `M(n,k)` is the largest reset threshold of an `n`-state `A_k`
-automaton with sink over any finite alphabet. They prove `M(n,1) = n(n-1)/2`, `M(n,n-1) = n-1`, exhibit
-automata with reset threshold `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉`, and conjecture this is the value of `M(n,k)`.
+Lipin and Volkov (Adversarial Synchronization, arXiv:2601.18362, §2.1) define the `k`-game on an automaton
+with a sink: Alice plays a letter, Bob replies with any word of length `< k`, and Alice wins when the history is
+a reset word. `A_k` automata are those Alice wins; `M(n,k)` is the largest reset threshold of an `n`-state `A_k`
+automaton with sink over any finite alphabet. They prove `M(n,n-1) = n-1`, recall Rystsov's tight bound
+`M(n,1) = n(n-1)/2`, exhibit automata `L^k_m` with reset threshold `f k n = ∑_{i=1}^{n-1} ⌈i/k⌉`, and
+conjecture (§3.4) that `M(n,k) = (n-1+k)(n-1)/(2k)` whenever `k ∣ n-1`, where that expression equals `f k n`.
+The ceiling-sum form `M(n,k) = f k n` for every `n, k` extends their conjecture to the non-divisible pairs; they
+do not state it. Beyond the settled endpoints `k = 1` and `k = n-1`, the new content of `docs/PROOF.md` is
+`M(k+2,k) = k+2` and `M(k+3,k) = k+4` for `k ≥ 2`, including the non-divisible pairs `(4,2)` and `(5,3)`;
+`(5,2)` is the first pair that is neither endpoint.
 
 The statements of record render the theorem of `docs/PROOF.md` §5: `M(n,k) = f k n` whenever `k = 1` or
 `n ≤ k + 3`, as a pair of bounds, plus the same pair for the headline case `M(5,2) = 6`:
@@ -32,8 +37,9 @@ The statements of record render the theorem of `docs/PROOF.md` §5: `M(n,k) = f 
 Conventions: states are `Fin n` with the sink `0` (so `[NeZero n]`); words act from the left letter
 onwards; an automaton is any set of transformations fixing `0`; Alice's winning is the inductive predicate
 `Automaton.AliceWins` (Alice moves first). Not formalized: `M(n,k)` itself as a supremum (the two bounds say
-exactly that the supremum is attained and equals `f k n`), the general Lipin–Volkov conjecture, and the
-computational record of PROOF.md Appendix A. CORRESPONDENCE.md §3–§5 audit the definitions and the gaps.
+exactly that the supremum is attained and equals `f k n`), the Lipin–Volkov conjecture and its ceiling-sum
+form beyond `k = 1` or `n ≤ k + 3`, and the computational record of PROOF.md Appendix A. CORRESPONDENCE.md
+§3–§5 audit the definitions and the gaps.
 The record section below is generated from `records.yaml` by `conductor package render`; its order is the
 order of `comparator.json` and of `formalization.yaml` (`status.main_results`, `alignment.statements`).
 -/
