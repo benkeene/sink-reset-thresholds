@@ -49,12 +49,18 @@ CI comparator. Decisions of scope, promotion and submission are Ben Keene's.
 
 ## Palomar entry and citation
 
-Submitted 2026-10-29 at commit `517b2cd82a8f3ee66476b90ee38a34d6cb9843f6` (mechanical verification passed; automated
-review: no blocking problems); registration requested 2026-10-30. Entry id, version and citation: TODO once the registry
-record is published. Erratum to that commit, found by the review: its Challenge.lean docstring, formalization.yaml and
-docs/CLAIM.md called `(5,2)` "the first pair that is neither endpoint"; `(4,2)` already is. `(5,2)` is the first
-non-endpoint pair with `k ∣ n-1`, the first on which the Lipin–Volkov conjecture itself was open. Corrected on main
-(docstring and prose only; no statement, definition or proof changed).
+Registered as [PALOMAR-2026-10-30-000003, version 1](https://palomar-registry.org/entry?id=PALOMAR-2026-10-30-000003&version=1)
+on 2026-10-30 at commit `517b2cd82a8f3ee66476b90ee38a34d6cb9843f6`: Comparator checked the four statements of record
+(`SinkReset.reset_word_le_of_isAk`, `SinkReset.exists_isAk_reset_ge`, `SinkReset.five_two_reset_word_le`,
+`SinkReset.five_two_exists_isAk_reset_ge`), replayed through the nanoda and con-ron kernels, using only `propext`,
+`Classical.choice` and `Quot.sound`; automated review: no blocking problems (not an endorsement), one non-blocking
+comment. That comment is the erratum to version 1: its Challenge.lean docstring, formalization.yaml and docs/CLAIM.md
+called `(5,2)` "the first pair that is neither endpoint"; `(4,2)` already is. `(5,2)` is the first non-endpoint pair with
+`k ∣ n-1`, the first on which the Lipin–Volkov conjecture itself was open. Version 2, submitted from this commit,
+carries the correction (docstring and prose only; no statement, definition or proof changed).
+
+Cite as: Ben Keene, *Sharp reset thresholds for bounded-response synchronization games with a sink* (Lean 4 / Mathlib
+formalization), Palomar Registry entry PALOMAR-2026-10-30-000003, 2026, https://github.com/benkeene/sink-reset-thresholds.
 
 ## Submission
 

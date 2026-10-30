@@ -114,31 +114,40 @@ so items 1–7 cover the Lean sources of every later docs commit. Items 13–15 
 - [x] 13. All four CI jobs green on the commit to submit  (pipeline)
       command: gh run list --commit <full sha> --json name,conclusion
       expect:  license, submission-link, build, comparator: success
-      quoted output (45e27e9b2c010e38efd2fda806132e10248724ee; https://github.com/benkeene/sink-reset-thresholds/actions/runs/40926409694):
-        $ gh run view 40926409694 --json conclusion,jobs --jq '.conclusion, (.jobs[] | "\(.name): \(.conclusion)")'
+      quoted output (c8edf565bcc113b970b6a77afa83a62021c6b9af, the erratum commit; https://github.com/benkeene/sink-reset-thresholds/actions/runs/40982295337):
+        $ gh run view 40982295337 --json conclusion,jobs --jq '.conclusion, (.jobs[] | "\(.name): \(.conclusion)")'
         success
-        Check metadata and Apache licence: success
         Build with Lean: success
-        Check where the README sends a submitter: success
+        Check metadata and Apache licence: success
         Check statement against solution: success
+        Check where the README sends a submitter: success
         con-ron: accepted 7556 declarations (--verified)
-        con-ron kernel accepts the solution
-        nanoda kernel accepts the solution
-        Lean default kernel accepts the solution
         Your solution is okay!
-      quoted output (45e27e9b2c010e38efd2fda806132e10248724ee; standalone milestone judge round, `conductor judge --round 1 --tree . --bootstrap 45e27e9b2c010e38efd2fda806132e10248724ee`):
-        overall: RECORDS_PROVED result_sha: 45e27e9b2c010e38efd2fda806132e10248724ee
-        SinkReset.reset_word_le_of_isAk clean ['propext', 'Classical.choice', 'Quot.sound']
-        SinkReset.exists_isAk_reset_ge clean ['propext', 'Classical.choice', 'Quot.sound']
-        SinkReset.five_two_reset_word_le clean ['propext', 'Classical.choice', 'Quot.sound']
-        SinkReset.five_two_exists_isAk_reset_ge clean ['propext', 'Classical.choice', 'Quot.sound']
-        records_challenge_eq_solution: all four True; records_eq_bootstrap: all four True; leanchecker rc 0 on Challenge, SinkReset.Basic, SinkReset.Plan, Solution; fidelity: structural EQUAL; VERDICT: CLEAN
-      The commit to submit is the one that adds this quote; it differs from 45e27e9b2c010e38efd2fda806132e10248724ee only in
-      docs/CHECKLIST.md (`git diff --stat 45e27e9 HEAD` names that one file), so no Lean source, workflow or metadata
-      file changed after the quoted run. CI runs again on the commit to submit; its run appears on the Actions page.
-- [ ] 14. Make the repository public  (human (Ben))
+      quoted output (c8edf565bcc113b970b6a77afa83a62021c6b9af; standalone milestone judge round, `conductor judge --round 1 --tree . --bootstrap c8edf565bcc113b970b6a77afa83a62021c6b9af`):
+        overall: RECORDS_PROVED result_sha: c8edf565bcc113b970b6a77afa83a62021c6b9af
+        records clean: True ['propext', 'Classical.choice', 'Quot.sound']
+        eq_solution: True eq_bootstrap: True leanchecker rc: 0
+        | 4 fidelity | yes | type hashes equal 4/4; structural EQUAL; list-order ok | conductor lean probe (Challenge, Solution); conductor lean probe fidelity; conductor package check |
+        VERDICT: CLEAN
+      Version 1 (517b2cd82a8f3ee66476b90ee38a34d6cb9843f6): CI run 40929221996 success; Palomar preflight run 40930526246
+      mechanical-report status "pass", warnings [], errors []; Palomar verification run 40934159003 success.
+      The version-2 commit to submit is the one that adds this quote and the README citation; it differs from
+      c8edf565bcc113b970b6a77afa83a62021c6b9af only in docs/CHECKLIST.md and README.md (`git diff --stat c8edf56 HEAD`), so no
+      Lean source, workflow or metadata file changed after the quoted run. CI, a judge round and the Palomar preflight run
+      again on it; their results are on the Actions page.
+- [x] 14. Make the repository public  (human (Ben))
       command: (Ben) GitHub settings; never by conductor
       expect:  —
-- [ ] 15. Submit to Palomar  (human (Ben))
+      quoted output (2026-10-29, Ben ran `gh repo edit benkeene/sink-reset-thresholds --visibility public --accept-visibility-change-consequences`):
+        ✓ Edited repository benkeene/sink-reset-thresholds
+        $ gh repo view benkeene/sink-reset-thresholds --json visibility --jq .visibility
+        PUBLIC
+- [x] 15. Submit to Palomar  (human (Ben))
       command: (Ben) https://submit.palomar-registry.org/ with the full 40-character SHA
       expect:  —
+      quoted output (Palomar submission page, version 1 at 517b2cd82a8f3ee66476b90ee38a34d6cb9843f6):
+        Submitted 2026-10-29T18:47:43Z — Verification run 40934159003
+        2026-10-29T18:52:10Z — Verification success
+        2026-10-29T19:31:33Z — The editorial review is ready for you   (Automated review: No blocking problems were identified.)
+        2026-10-30T00:54:39Z — Registered as PALOMAR-2026-10-30-000003 version 1
+      Version 2 (this commit, erratum applied) is submitted by Ben as a new version of PALOMAR-2026-10-30-000003.
