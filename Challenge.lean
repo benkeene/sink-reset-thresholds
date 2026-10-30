@@ -23,7 +23,8 @@ conjecture (§3.4) that `M(n,k) = (n-1+k)(n-1)/(2k)` whenever `k ∣ n-1`, where
 The ceiling-sum form `M(n,k) = f k n` for every `n, k` extends their conjecture to the non-divisible pairs; they
 do not state it. Beyond the settled endpoints `k = 1` and `k = n-1`, the new content of `docs/PROOF.md` is
 `M(k+2,k) = k+2` and `M(k+3,k) = k+4` for `k ≥ 2`, including the non-divisible pairs `(4,2)` and `(5,3)`;
-`(5,2)` is the first pair that is neither endpoint.
+`(5,2)` is the first pair with `k ∣ n-1` that is neither endpoint, so the first pair on which the
+Lipin–Volkov conjecture itself was open; `(4,2)` is the first non-endpoint pair of all.
 
 The statements of record render the theorem of `docs/PROOF.md` §5: `M(n,k) = f k n` whenever `k = 1` or
 `n ≤ k + 3`, as a pair of bounds, plus the same pair for the headline case `M(5,2) = 6`:

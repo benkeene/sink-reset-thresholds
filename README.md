@@ -49,7 +49,12 @@ CI comparator. Decisions of scope, promotion and submission are Ben Keene's.
 
 ## Palomar entry and citation
 
-TODO: filled after registration (entry id, version, pinned commit, citation).
+Submitted 2026-10-29 at commit `517b2cd82a8f3ee66476b90ee38a34d6cb9843f6` (mechanical verification passed; automated
+review: no blocking problems); registration requested 2026-10-30. Entry id, version and citation: TODO once the registry
+record is published. Erratum to that commit, found by the review: its Challenge.lean docstring, formalization.yaml and
+docs/CLAIM.md called `(5,2)` "the first pair that is neither endpoint"; `(4,2)` already is. `(5,2)` is the first
+non-endpoint pair with `k ∣ n-1`, the first on which the Lipin–Volkov conjecture itself was open. Corrected on main
+(docstring and prose only; no statement, definition or proof changed).
 
 ## Submission
 
