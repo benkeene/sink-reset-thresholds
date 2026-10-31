@@ -150,4 +150,15 @@ so items 1–7 cover the Lean sources of every later docs commit. Items 13–15 
         2026-10-29T18:52:10Z — Verification success
         2026-10-29T19:31:33Z — The editorial review is ready for you   (Automated review: No blocking problems were identified.)
         2026-10-30T00:54:39Z — Registered as PALOMAR-2026-10-30-000003 version 1
-      Version 2 (this commit, erratum applied) is submitted by Ben as a new version of PALOMAR-2026-10-30-000003.
+      quoted output (Palomar submission page and data.palomar-registry.org, version 2 at 0a4048a517c5a1e6382e0726f39ea125eddb658a, the erratum commit's successor):
+        Submitted 2026-10-30T19:32:05Z — Verification run 41116034616
+        2026-10-30T19:40:32Z — Verification success
+        2026-10-30T20:10:14Z — The editorial review is ready for you   (Automated review: No problems were identified.)
+        2026-10-31T00:01:40Z — The submitter asked for this result to be registered
+        entries/PALOMAR-2026-10-30-000003-v2.json: "status": "registered", "registered_at": "2026-10-31T00:04:07Z",
+          source.commit 0a4048a517c5a1e6382e0726f39ea125eddb658a, verification.run_id 41116034616,
+          challenge_sha256 5a7c1a697ff058ca2bd56a7c630e66649c2b321b822d595f7bb701e4ccd56e6c,
+          solution_sha256 41f75ba14acef9b0fb385ae0a3ce4865b72024fecd7d689b6191a9f4bb7c1ee5
+        $ for f in Challenge.lean Solution.lean; do git show 0a4048a:$f | shasum -a 256; done
+        5a7c1a697ff058ca2bd56a7c630e66649c2b321b822d595f7bb701e4ccd56e6c  -
+        41f75ba14acef9b0fb385ae0a3ce4865b72024fecd7d689b6191a9f4bb7c1ee5  -

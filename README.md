@@ -49,18 +49,38 @@ CI comparator. Decisions of scope, promotion and submission are Ben Keene's.
 
 ## Palomar entry and citation
 
-Registered as [PALOMAR-2026-10-30-000003, version 1](https://palomar-registry.org/entry?id=PALOMAR-2026-10-30-000003&version=1)
-on 2026-10-30 at commit `517b2cd82a8f3ee66476b90ee38a34d6cb9843f6`: Comparator checked the four statements of record
-(`SinkReset.reset_word_le_of_isAk`, `SinkReset.exists_isAk_reset_ge`, `SinkReset.five_two_reset_word_le`,
-`SinkReset.five_two_exists_isAk_reset_ge`), replayed through the nanoda and con-ron kernels, using only `propext`,
-`Classical.choice` and `Quot.sound`; automated review: no blocking problems (not an endorsement), one non-blocking
-comment. That comment is the erratum to version 1: its Challenge.lean docstring, formalization.yaml and docs/CLAIM.md
-called `(5,2)` "the first pair that is neither endpoint"; `(4,2)` already is. `(5,2)` is the first non-endpoint pair with
-`k ∣ n-1`, the first on which the Lipin–Volkov conjecture itself was open. Version 2, submitted from this commit,
-carries the correction (docstring and prose only; no statement, definition or proof changed).
+Registered as [PALOMAR-2026-10-30-000003](https://palomar-registry.org/entry?id=PALOMAR-2026-10-30-000003), in two
+immutable versions:
 
-Cite as: Ben Keene, *Sharp reset thresholds for bounded-response synchronization games with a sink* (Lean 4 / Mathlib
-formalization), Palomar Registry entry PALOMAR-2026-10-30-000003, 2026, https://github.com/benkeene/sink-reset-thresholds.
+- [version 1](https://palomar-registry.org/entry?id=PALOMAR-2026-10-30-000003&version=1), registered 2026-10-30 at commit
+  `517b2cd82a8f3ee66476b90ee38a34d6cb9843f6`; automated review: no blocking problems, one non-blocking comment (the erratum below);
+- [version 2](https://palomar-registry.org/entry?id=PALOMAR-2026-10-30-000003&version=2), registered 2026-10-31 at commit
+  `0a4048a517c5a1e6382e0726f39ea125eddb658a`; automated review: no problems identified. This is the version to cite.
+
+For each version Comparator checked the four statements of record (`SinkReset.reset_word_le_of_isAk`,
+`SinkReset.exists_isAk_reset_ge`, `SinkReset.five_two_reset_word_le`, `SinkReset.five_two_exists_isAk_reset_ge`), replayed
+through the nanoda and con-ron kernels, using only `propext`, `Classical.choice` and `Quot.sound`. The automated review
+(codex:gpt-6-sol) is not human peer review and not an endorsement.
+
+Erratum to version 1: its Challenge.lean docstring, formalization.yaml and docs/CLAIM.md called `(5,2)` "the first pair that
+is neither endpoint"; `(4,2)` already is. `(5,2)` is the first non-endpoint pair with `k ∣ n-1`, the first on which the
+Lipin–Volkov conjecture itself was open. Version 2 carries the correction (docstring and prose only; no statement, definition
+or proof changed).
+
+Cite version 2 (Palomar's citation block for the registered record):
+
+```bibtex
+@misc{palomar-2026-10-30-000003-v2,
+  author = {{Ben Keene}},
+  title = {{Sharp reset thresholds for bounded-response synchronization games with a sink}},
+  year = {2026},
+  howpublished = {Palomar, PALOMAR-2026-10-30-000003 v2},
+  url = {https://palomar-registry.org/entry?id=PALOMAR-2026-10-30-000003&version=2},
+}
+```
+
+Source: https://github.com/benkeene/sink-reset-thresholds at the commit above; Palomar also preserves a copy
+(PalomarArchive fork, tag `palomar/PALOMAR-2026-10-30-000003-v2/0a4048a…`).
 
 ## Submission
 
